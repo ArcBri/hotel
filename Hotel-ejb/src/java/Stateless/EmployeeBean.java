@@ -45,7 +45,7 @@ public class EmployeeBean implements EmployeeBeanRemote, EmployeeBeanLocal {
     @Override
     public EmployeeEntity retrieveStaffByUsername(String username)
     {
-        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.userName = :inUsername");
+        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername");
         query.setParameter("inUsername", username);
         
         {
