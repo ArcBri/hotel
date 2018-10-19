@@ -11,8 +11,12 @@ import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.EmployeeNotFoundException;
+import util.exception.InvalidLoginCredentialException;
 
 /**
  *
@@ -43,30 +47,39 @@ public class EmployeeBean implements EmployeeBeanRemote, EmployeeBeanLocal {
         return query.getResultList();
     }
     @Override
-    public EmployeeEntity retrieveStaffByUsername(String username)
+    public EmployeeEntity retrieveStaffByUsername(String username) throws EmployeeNotFoundException
     {
         Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername");
         query.setParameter("inUsername", username);
         
+        try
         {
             return (EmployeeEntity)query.getSingleResult();
+        }
+        catch(NoResultException|NonUniqueResultException ex)
+        {
+            throw new EmployeeNotFoundException("Employee does not exist.");
         }
 
 
     }
     @Override
-    public EmployeeEntity staffLogin(String username, String password){
+    public EmployeeEntity staffLogin(String username, String password)throws InvalidLoginCredentialException{
     
        
-        
+        try{
             EmployeeEntity staffEntity = retrieveStaffByUsername(username);
             
             if(staffEntity.getPassword().equals(password))
             {                
                 return staffEntity;
             }else{
-                return staffEntity;
+                throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
             }
+        }
+        catch(EmployeeNotFoundException ex){
+            throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
+        }
 
         
     }

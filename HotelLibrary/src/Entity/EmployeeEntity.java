@@ -6,11 +6,13 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 /**
@@ -32,7 +34,9 @@ public class EmployeeEntity implements Serializable {
     private String username;
     @Column(length = 32, nullable = false)
     private String password;
-    @Transient
+    @OneToMany(mappedBy="employee")
+    private List<BookingOrder> bookingOrder;
+        @Transient
     private String fullName;
 
     public EmployeeEntity() {
@@ -114,5 +118,14 @@ public class EmployeeEntity implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
+    public List<BookingOrder> getBookingOrder() {
+        return bookingOrder;
+    }
+
+    public void setBookingOrder(List<BookingOrder> bookingOrder) {
+        this.bookingOrder = bookingOrder;
+    }
+
+
 }

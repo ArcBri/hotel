@@ -5,6 +5,8 @@
  */
 package hotelmanagementclient;
 
+import util.exception.InvalidLoginCredentialException;
+
 /**
  *
  * @author Joshua
@@ -13,8 +15,10 @@ public class Main {
 
     /**
      * @param args the command line arguments
+     * @throws util.exception.InvalidLoginCredentialException
      */
-     public static void main(String[] args) {
+    
+     public static void main(String[] args) throws InvalidLoginCredentialException {
         mainApp MainApp = new mainApp();
         MainApp.run();
     }

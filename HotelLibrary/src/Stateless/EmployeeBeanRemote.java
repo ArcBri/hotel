@@ -7,6 +7,8 @@ package Stateless;
 
 import Entity.EmployeeEntity;
 import java.util.List;
+import util.EmployeeNotFoundException;
+import util.exception.InvalidLoginCredentialException;
 
 /**
  *
@@ -16,9 +18,9 @@ public interface EmployeeBeanRemote {
 
     public List<EmployeeEntity> retrieveAllEmployeeEntity();
 
-    public EmployeeEntity retrieveStaffByUsername(String username);
+    public EmployeeEntity retrieveStaffByUsername(String username)throws EmployeeNotFoundException;
 
-    public EmployeeEntity staffLogin(String username, String password);
+    public EmployeeEntity staffLogin(String username, String password)throws InvalidLoginCredentialException;
 
     public Long createEmployee(EmployeeEntity newEmployeeEntity);
     

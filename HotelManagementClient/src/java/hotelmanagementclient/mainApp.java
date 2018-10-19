@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import util.exception.InvalidLoginCredentialException;
 
 /**
  *
@@ -27,18 +28,22 @@ class mainApp {
     private EmployeeEntity loggedInEmployee;
     private Long EmployeeId;
     private List<EmployeeEntity> employeeList;
-    private EmployeeBeanRemote employeebean = lookupEmployeeBeanRemote();
+    
+    private final EmployeeBeanRemote employeebean = lookupEmployeeBeanRemote();
 
     public mainApp() {
     }
 
-    public void run() {
+    public void run() throws InvalidLoginCredentialException {
         while (end == false) {
             if (state == false) {
                 System.out.print("Enter Username:");
                 String u = sc.next();
                 System.out.print("Enter Password:");
                 String p = sc.next();
+                if(u.equals("hi")||p.equals("bye")){
+                    System.out.print("error");
+                }
                 loggedInEmployee = employeebean.staffLogin(u, p);
                 EmployeeId = loggedInEmployee.getEmployeeId();
                 state = true;
