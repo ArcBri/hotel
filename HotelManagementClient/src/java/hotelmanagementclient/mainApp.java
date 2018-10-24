@@ -100,7 +100,7 @@ class mainApp {
     private void createNewRoomType() {
         System.out.println("Enter name of room type");
         int g = sc.nextInt(); //settle the conversion of int to type and add a menu here for int pressing
-        //sc.next();
+        sc.nextLine();
         System.out.println("Enter description of room type");
         String b = sc.nextLine();
         System.out.println("Enter size of room");
