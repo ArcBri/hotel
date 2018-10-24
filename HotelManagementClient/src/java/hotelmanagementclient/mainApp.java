@@ -6,7 +6,9 @@
 package hotelmanagementclient;
 
 import Entity.EmployeeEntity;
+import Entity.RoomTypeEntity;
 import Stateless.EmployeeBeanRemote;
+import Stateless.RoomTypeBeanRemote;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -30,6 +32,7 @@ class mainApp {
     private List<EmployeeEntity> employeeList;
     
     private final EmployeeBeanRemote employeebean = lookupEmployeeBeanRemote();
+    private final RoomTypeBeanRemote roomtypebean = lookupRoomTypeBeanRemote();
 
     public mainApp() {
     }
@@ -59,6 +62,9 @@ class mainApp {
                         break;
                     case 2:
                         viewEmployees();
+                        break;
+                    case 3:
+                        createNewRoomType();
                         break;
                     case 0:
                         state = false;
@@ -90,6 +96,23 @@ class mainApp {
         EmployeeEntity employee = new EmployeeEntity(f, l, u, p);
         employeebean.createEmployee(employee);
     }
+    
+    private void createNewRoomType() {
+        System.out.println("Enter name of room type");
+        int g = sc.nextInt(); //settle the conversion of int to type and add a menu here for int pressing
+        //sc.next();
+        System.out.println("Enter description of room type");
+        String b = sc.nextLine();
+        System.out.println("Enter size of room");
+        String a = sc.next();
+        System.out.println("Enter number of beds");
+        int m = sc.nextInt();
+        System.out.println("Enter capacity of room");
+        int n = sc.nextInt();
+        //add amenities later
+        RoomTypeEntity roomtype = new RoomTypeEntity(g, b, a, m, n);
+        roomtypebean.createRoomType(roomtype);
+    }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {
         try {
@@ -100,5 +123,17 @@ class mainApp {
             throw new RuntimeException(ne);
         }
     }
+
+    private RoomTypeBeanRemote lookupRoomTypeBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (RoomTypeBeanRemote) c.lookup("java:comp/env/RoomTypeBeanRemote");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+
 
 }

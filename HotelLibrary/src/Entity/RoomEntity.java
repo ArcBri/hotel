@@ -6,20 +6,21 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 
 /**
  *
- * @author Justin
+ * @author user
  */
 @Entity
 public class RoomEntity implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,33 +31,25 @@ public class RoomEntity implements Serializable {
     private int floorNumber;
     @Column(length = 32, nullable = false)
     private int roomNumber;
+    @Column(length = 32, nullable = false)
+    private int finalNumber;
     @Column
     private boolean roomAvailable;
-    @Column(length = 32, nullable = false)
-    private int bedNumber;
-    @Column(length = 32, nullable = false)
-    private int capacity;
-    @Column
-    private int[] amenities=new int[0];
-    @Column(length = 32, nullable = false)
-    private int roomNumberFinal;
-    @ManyToOne
-    private BookingOrder booking;
-
+    @ManyToMany
+    private List<BookingOrder> booking;
 
     public RoomEntity() {
     }
 
-    public RoomEntity(int roomType, int floorNumber, int roomNumber, boolean roomAvailable, int bedNumber, int capacity, int[] amenities) {
+    public RoomEntity(int roomType, int floorNumber, int roomNumber, boolean roomAvailable) {
         this.roomType = roomType;
         this.floorNumber = floorNumber;
         this.roomNumber = roomNumber;
         this.roomAvailable = roomAvailable;
-        this.bedNumber = bedNumber;
-        this.capacity = capacity;
-        this.amenities = amenities;
-        roomNumberFinal = (floorNumber*100) + roomNumber;
+        this.finalNumber =  floorNumber * 100 + roomNumber;
     }
+    
+    
 
     public Long getRoomId() {
         return roomId;
@@ -80,6 +73,7 @@ public class RoomEntity implements Serializable {
 
     public void setFloorNumber(int floorNumber) {
         this.floorNumber = floorNumber;
+        this.finalNumber =  floorNumber * 100 + roomNumber;
     }
 
     public int getRoomNumber() {
@@ -88,6 +82,15 @@ public class RoomEntity implements Serializable {
 
     public void setRoomNumber(int roomNumber) {
         this.roomNumber = roomNumber;
+        this.finalNumber =  floorNumber * 100 + roomNumber;
+    }
+
+    public int getFinalNumber() {
+        return finalNumber;
+    }
+
+    public void setFinalNumber(int finalNumber) {
+        this.finalNumber = finalNumber;
     }
 
     public boolean isRoomAvailable() {
@@ -97,47 +100,9 @@ public class RoomEntity implements Serializable {
     public void setRoomAvailable(boolean roomAvailable) {
         this.roomAvailable = roomAvailable;
     }
-
-    public int getBedNumber() {
-        return bedNumber;
-    }
-
-    public void setBedNumber(int bedNumber) {
-        this.bedNumber = bedNumber;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public int[] getAmenities() {
-        return amenities;
-    }
-
-    public void setAmenities(int[] amenities) {
-        this.amenities = amenities;
-    }
-
-    public int getRoomNumberFinal() {
-        return roomNumberFinal;
-    }
-
-    public void setRoomNumberFinal(int roomNumberFinal) {
-        this.roomNumberFinal = roomNumberFinal;
-    }
-
-    public BookingOrder getBooking() {
-        return booking;
-    }
-
-    public void setBooking(BookingOrder booking) {
-        this.booking = booking;
-    }
-        @Override
+    
+    
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (roomId != null ? roomId.hashCode() : 0);
@@ -146,7 +111,7 @@ public class RoomEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the orderId fields are not set
+        // TODO: Warning - this method won't work in the case the roomId fields are not set
         if (!(object instanceof RoomEntity)) {
             return false;
         }
@@ -162,6 +127,12 @@ public class RoomEntity implements Serializable {
         return "Entity.RoomEntity[ id=" + roomId + " ]";
     }
 
+    public List<BookingOrder> getBooking() {
+        return booking;
+    }
 
+    public void setBooking(List<BookingOrder> booking) {
+        this.booking = booking;
+    }
     
 }
