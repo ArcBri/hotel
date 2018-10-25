@@ -26,7 +26,7 @@ public class RoomTypeEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomTypeId;
     @Column(length = 32, nullable = false)
-    private int typeName;
+    private String typeName;
     @Column(length = 32, nullable = false)
     private String typeDescription;
     @Column(length = 32, nullable = false)
@@ -43,7 +43,7 @@ public class RoomTypeEntity implements Serializable {
     public RoomTypeEntity() {
     }
 
-    public RoomTypeEntity(int typeName, String typeDescription, String size, int bedNumber, int capacity) {
+    public RoomTypeEntity(String typeName, String typeDescription, String size, int bedNumber, int capacity) {
         this.typeName = typeName;
         this.typeDescription = typeDescription;
         this.size = size;
@@ -52,8 +52,8 @@ public class RoomTypeEntity implements Serializable {
     }
 
     
-    public RoomTypeEntity(int roomType, int bedNumber, int capacity, int[] amenities) {
-        this.typeName = roomType;
+    public RoomTypeEntity(String typeName, int bedNumber, int capacity, int[] amenities) {
+        this.typeName = typeName;
         this.bedNumber = bedNumber;
         this.capacity = capacity;
         //this.amenities = amenities;
@@ -92,11 +92,33 @@ public class RoomTypeEntity implements Serializable {
         return "Entity.RoomEntity[ id=" + roomTypeId + " ]";
     }
 
-    public int getTypeName() {
+    public String getTypeName() {
         return typeName;
     }
+    
+    /*public String getTypeName() {
+        String returnType = "";
+        switch (typeName) {
+            case 1:
+                returnType = "Deluxe Room";
+                break;
+            case 2:
+                returnType = "Premier Room";
+                break;
+            case 3:
+                returnType = "Family Room";
+                break;
+            case 4:
+                returnType = "Junior Suite";
+                break;
+            case 5:
+                returnType = "Grand Suite";
+                break;
+        }
+        return returnType;
+    }*/
 
-    public void setTypeName(int typeName) {
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
 

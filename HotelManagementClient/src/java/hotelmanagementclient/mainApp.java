@@ -53,8 +53,10 @@ class mainApp {
             } else if (state == true) {
                 System.out.println("Choose Option");
                 System.out.println("1) Create Employee");
-                System.out.println("2)View All Employees");
-                System.out.println("0)Log Out");
+                System.out.println("2) View All Employees");
+                System.out.println("3) Create a New Room Type");
+                System.out.println("4) View All Room Types");
+                System.out.println("0) Log Out");
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1:
@@ -65,6 +67,9 @@ class mainApp {
                         break;
                     case 3:
                         createNewRoomType();
+                        break;
+                    case 4:
+                        viewAllRoomTypes();
                         break;
                     case 0:
                         state = false;
@@ -98,20 +103,29 @@ class mainApp {
     }
     
     private void createNewRoomType() {
-        System.out.println("Enter name of room type");
-        int g = sc.nextInt(); //settle the conversion of int to type and add a menu here for int pressing
+        System.out.println("Enter name of room type:(Deluxe Room = 1, Premier Room = 2, Family Room = 3, Junior Suite = 4, Grand Suite = 5");
+        //int g = sc.nextInt();//add a way to catch adding the same room type and redirect to update
+        String g = sc.nextLine();
         sc.nextLine();
-        System.out.println("Enter description of room type");
+        System.out.println("Enter description of room type:");
         String b = sc.nextLine();
-        System.out.println("Enter size of room");
+        //sc.nextLine();
+        System.out.println("Enter size of room:");
         String a = sc.next();
-        System.out.println("Enter number of beds");
+        System.out.println("Enter number of beds:");
         int m = sc.nextInt();
-        System.out.println("Enter capacity of room");
+        System.out.println("Enter capacity of room:");
         int n = sc.nextInt();
         //add amenities later
         RoomTypeEntity roomtype = new RoomTypeEntity(g, b, a, m, n);
         roomtypebean.createRoomType(roomtype);
+    }
+    
+    private void viewAllRoomTypes() {
+        List<RoomTypeEntity> RoomTypesList = roomtypebean.viewAllRoomTypes();
+        for(RoomTypeEntity r: RoomTypesList){
+            System.out.println("Room Type: " + r.getTypeName() + ", Room Description: " + r.getTypeDescription() + ", Room Size: " + r.getSize() + ", Number of Beds: " + r.getBedNumber() + ", Capacity of Room: " + r.getCapacity());
+        }
     }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {
