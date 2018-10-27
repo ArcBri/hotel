@@ -104,12 +104,10 @@ class mainApp {
     
     private void createNewRoomType() {
         System.out.println("Enter name of room type:(Deluxe Room = 1, Premier Room = 2, Family Room = 3, Junior Suite = 4, Grand Suite = 5");
-        //int g = sc.nextInt();//add a way to catch adding the same room type and redirect to update
-        String g = sc.nextLine();
         sc.nextLine();
+        String g = sc.nextLine();
         System.out.println("Enter description of room type:");
         String b = sc.nextLine();
-        //sc.nextLine();
         System.out.println("Enter size of room:");
         String a = sc.next();
         System.out.println("Enter number of beds:");

@@ -95,28 +95,6 @@ public class RoomTypeEntity implements Serializable {
     public String getTypeName() {
         return typeName;
     }
-    
-    /*public String getTypeName() {
-        String returnType = "";
-        switch (typeName) {
-            case 1:
-                returnType = "Deluxe Room";
-                break;
-            case 2:
-                returnType = "Premier Room";
-                break;
-            case 3:
-                returnType = "Family Room";
-                break;
-            case 4:
-                returnType = "Junior Suite";
-                break;
-            case 5:
-                returnType = "Grand Suite";
-                break;
-        }
-        return returnType;
-    }*/
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
