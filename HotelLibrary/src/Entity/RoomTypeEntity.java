@@ -27,7 +27,7 @@ public class RoomTypeEntity implements Serializable {
     private Long roomTypeId;
     @Column(length = 32, nullable = false)
     private String typeName;
-    @Column(length = 32, nullable = false)
+    @Column(length = 255, nullable = false)
     private String typeDescription;
     @Column(length = 32, nullable = false)
     private String size;
@@ -37,6 +37,7 @@ public class RoomTypeEntity implements Serializable {
     private int capacity;
     @Column
     private int[] amenities=new int[10];
+    private int disabled = 0;
     
    
 
@@ -139,8 +140,16 @@ public class RoomTypeEntity implements Serializable {
     public void setSize(String size) {
         this.size = size;
     }
-    
-    
+
+    public int getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled() {
+        this.disabled = 1;
+    }
+
+
 
 
     

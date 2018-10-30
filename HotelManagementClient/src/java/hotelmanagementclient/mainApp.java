@@ -71,6 +71,7 @@ class mainApp {
                     case 4:
                         viewAllRoomTypes();
                         break;
+                        //edit a type A
                     case 0:
                         state = false;
                         System.out.println("End Application? Y/N");
@@ -103,7 +104,7 @@ class mainApp {
     }
     
     private void createNewRoomType() {
-        System.out.println("Enter name of room type:(Deluxe Room = 1, Premier Room = 2, Family Room = 3, Junior Suite = 4, Grand Suite = 5");
+        System.out.println("Enter name of room type:(Deluxe Room, Premier Room, Family Room, Junior Suite, Grand Suite");
         sc.nextLine();
         String g = sc.nextLine();
         System.out.println("Enter description of room type:");
@@ -124,6 +125,7 @@ class mainApp {
         for(RoomTypeEntity r: RoomTypesList){
             System.out.println("Room Type: " + r.getTypeName() + ", Room Description: " + r.getTypeDescription() + ", Room Size: " + r.getSize() + ", Number of Beds: " + r.getBedNumber() + ", Capacity of Room: " + r.getCapacity());
         }
+        //edit a type B
     }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {
