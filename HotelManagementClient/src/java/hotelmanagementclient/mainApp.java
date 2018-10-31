@@ -6,7 +6,9 @@
 package hotelmanagementclient;
 
 import Entity.EmployeeEntity;
+import Entity.RoomTypeEntity;
 import Stateless.EmployeeBeanRemote;
+import Stateless.RoomTypeBeanRemote;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -30,6 +32,7 @@ class mainApp {
     private List<EmployeeEntity> employeeList;
     
     private final EmployeeBeanRemote employeebean = lookupEmployeeBeanRemote();
+    private final RoomTypeBeanRemote roomtypebean = lookupRoomTypeBeanRemote();
 
     public mainApp() {
     }
@@ -50,8 +53,10 @@ class mainApp {
             } else if (state == true) {
                 System.out.println("Choose Option");
                 System.out.println("1) Create Employee");
-                System.out.println("2)View All Employees");
-                System.out.println("0)Log Out");
+                System.out.println("2) View All Employees");
+                System.out.println("3) Create a New Room Type");
+                System.out.println("4) View All Room Types");
+                System.out.println("0) Log Out");
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1:
@@ -60,6 +65,13 @@ class mainApp {
                     case 2:
                         viewEmployees();
                         break;
+                    case 3:
+                        createNewRoomType();
+                        break;
+                    case 4:
+                        viewAllRoomTypes();
+                        break;
+                        //edit a type A
                     case 0:
                         state = false;
                         System.out.println("End Application? Y/N");
@@ -90,6 +102,31 @@ class mainApp {
         EmployeeEntity employee = new EmployeeEntity(f, l, u, p);
         employeebean.createEmployee(employee);
     }
+    
+    private void createNewRoomType() {
+        System.out.println("Enter name of room type:(Deluxe Room, Premier Room, Family Room, Junior Suite, Grand Suite");
+        sc.nextLine();
+        String g = sc.nextLine();
+        System.out.println("Enter description of room type:");
+        String b = sc.nextLine();
+        System.out.println("Enter size of room:");
+        String a = sc.next();
+        System.out.println("Enter number of beds:");
+        int m = sc.nextInt();
+        System.out.println("Enter capacity of room:");
+        int n = sc.nextInt();
+        //add amenities later
+        RoomTypeEntity roomtype = new RoomTypeEntity(g, b, a, m, n);
+        roomtypebean.createRoomType(roomtype);
+    }
+    
+    private void viewAllRoomTypes() {
+        List<RoomTypeEntity> RoomTypesList = roomtypebean.viewAllRoomTypes();
+        for(RoomTypeEntity r: RoomTypesList){
+            System.out.println("Room Type: " + r.getTypeName() + ", Room Description: " + r.getTypeDescription() + ", Room Size: " + r.getSize() + ", Number of Beds: " + r.getBedNumber() + ", Capacity of Room: " + r.getCapacity());
+        }
+        //edit a type B
+    }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {
         try {
@@ -100,5 +137,17 @@ class mainApp {
             throw new RuntimeException(ne);
         }
     }
+
+    private RoomTypeBeanRemote lookupRoomTypeBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (RoomTypeBeanRemote) c.lookup("java:comp/env/RoomTypeBeanRemote");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+
 
 }
