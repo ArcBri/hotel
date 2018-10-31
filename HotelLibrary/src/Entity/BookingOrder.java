@@ -27,7 +27,11 @@ public class BookingOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
     @ManyToMany(cascade=ALL, mappedBy="booking")
+<<<<<<< HEAD
     private List<dayTracker> bookedDays;
+=======
+    private List<RoomEntity> roomBooking;
+>>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
     @ManyToOne
     private EmployeeEntity employee;
     @ManyToOne

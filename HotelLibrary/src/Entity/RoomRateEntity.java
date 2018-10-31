@@ -12,7 +12,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+<<<<<<< HEAD
 import javax.persistence.ManyToOne;
+=======
+>>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
 
 /**
  *
@@ -28,6 +31,7 @@ public class RoomRateEntity implements Serializable {
     @Column(length = 32, nullable = false)
     private String name;
     @Column(length = 32, nullable = false)
+<<<<<<< HEAD
     private int rateType;
     @Column(length = 32, nullable = false)
     private int roomType;
@@ -37,6 +41,15 @@ public class RoomRateEntity implements Serializable {
     private Calendar validityPeriod;
     @ManyToOne
     private RoomTypeEntity roomstype;
+=======
+    private int roomType;
+    @Column(length = 32, nullable = false)
+    private int rateType;
+    @Column(length = 32, nullable = false)
+    private int ratePerNight;
+    @Column
+    private Calendar validityPeriod;
+>>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
 
     public RoomRateEntity() {
     }
@@ -128,6 +141,7 @@ public class RoomRateEntity implements Serializable {
     public void setValidityPeriod(Calendar validityPeriod) {
         this.validityPeriod = validityPeriod;
     }
+<<<<<<< HEAD
 
     public RoomTypeEntity getRoomsType() {
         return roomstype;
@@ -136,6 +150,8 @@ public class RoomRateEntity implements Serializable {
     public void setRoomsType(RoomTypeEntity roomsType) {
         this.roomstype = roomsType;
     }
+=======
+>>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
     
 }
 

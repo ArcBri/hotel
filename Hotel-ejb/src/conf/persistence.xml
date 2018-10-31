@@ -8,8 +8,11 @@
     <class>Entity.PartnerEntity</class>
     <class>Entity.RoomRateEntity</class>
     <class>Entity.RoomTypeEntity</class>
+<<<<<<< HEAD
     <class>Entity.GuestEntity</class>
     <class>Entity.dayTracker</class>
+=======
+>>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
