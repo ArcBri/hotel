@@ -13,10 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-<<<<<<< HEAD
 import javax.persistence.ManyToOne;
-=======
->>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
 
 /**
  *
@@ -40,13 +37,9 @@ public class RoomEntity implements Serializable {
     @Column
     private boolean roomAvailable;
     @ManyToMany
-<<<<<<< HEAD
     private List<dayTracker> dayBooked;
     @ManyToOne
     private RoomTypeEntity roomtype;
-=======
-    private List<BookingOrder> booking;
->>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
 
     public RoomEntity() {
     }
@@ -137,7 +130,6 @@ public class RoomEntity implements Serializable {
         return "Entity.RoomEntity[ id=" + roomId + " ]";
     }
 
-<<<<<<< HEAD
     public List<dayTracker> getDayBooked() {
         return dayBooked;
     }
@@ -152,14 +144,6 @@ public class RoomEntity implements Serializable {
 
     public void setRoomtype(RoomTypeEntity roomtype) {
         this.roomtype = roomtype;
-=======
-    public List<BookingOrder> getBooking() {
-        return booking;
-    }
-
-    public void setBooking(List<BookingOrder> booking) {
-        this.booking = booking;
->>>>>>> 4a44cc21b8278928aaf5b26ee2f384267303ccfd
     }
     
 }
