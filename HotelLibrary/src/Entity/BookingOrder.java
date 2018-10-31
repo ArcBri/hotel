@@ -27,9 +27,26 @@ public class BookingOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
     @ManyToMany(cascade=ALL, mappedBy="booking")
-    private List<RoomEntity> roomBooking;
+    private List<dayTracker> bookedDays;
     @ManyToOne
     private EmployeeEntity employee;
+    @ManyToOne
+    private GuestEntity guest;
+
+    public BookingOrder() {
+    }
+
+    public BookingOrder(List<dayTracker> bookedDays, EmployeeEntity employee) {
+        this.bookedDays = bookedDays;
+        this.employee = employee;
+    }
+
+    public BookingOrder(List<dayTracker> bookedDays, GuestEntity guest) {
+        this.bookedDays = bookedDays;
+        this.guest = guest;
+    }
+    
+    
 
     public Long getOrderId() {
         return orderId;
@@ -64,12 +81,12 @@ public class BookingOrder implements Serializable {
         return "Entity.BookingOrder[ id=" + orderId + " ]";
     }
 
-    public List<RoomEntity> getRoomBooking() {
-        return roomBooking;
+    public List<dayTracker> getBookedDays() {
+        return bookedDays;
     }
 
-    public void setRoomBooking(List<RoomEntity> roomBooking) {
-        this.roomBooking = roomBooking;
+    public void setBookedDays(List<dayTracker> bookedDays) {
+        this.bookedDays = bookedDays;
     }
 
     public EmployeeEntity getEmployee() {
@@ -78,6 +95,14 @@ public class BookingOrder implements Serializable {
 
     public void setEmployee(EmployeeEntity employee) {
         this.employee = employee;
+    }
+
+    public GuestEntity getGuest() {
+        return guest;
+    }
+
+    public void setGuest(GuestEntity guest) {
+        this.guest = guest;
     }
     
 }

@@ -7,6 +7,7 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +35,7 @@ public class EmployeeEntity implements Serializable {
     private String username;
     @Column(length = 32, nullable = false)
     private String password;
-    @OneToMany(mappedBy="employee")
+    @OneToMany(mappedBy="employee", cascade={CascadeType.MERGE,CascadeType.PERSIST})
     private List<BookingOrder> bookingOrder;
         @Transient
     private String fullName;

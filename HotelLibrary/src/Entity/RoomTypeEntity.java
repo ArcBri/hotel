@@ -7,12 +7,14 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.List;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -37,7 +39,12 @@ public class RoomTypeEntity implements Serializable {
     private int capacity;
     @Column
     private int[] amenities=new int[10];
+    @OneToMany(mappedBy="roomtype", cascade={PERSIST, MERGE})
+    private List<RoomEntity> rooms;
+    @OneToMany(mappedBy="roomstype", cascade={PERSIST, MERGE})
+    private List<RoomRateEntity> roomrates;
     private int disabled = 0;
+    
     
    
 
@@ -51,6 +58,7 @@ public class RoomTypeEntity implements Serializable {
         this.bedNumber = bedNumber;
         this.capacity = capacity;
     }
+    
 
     
     public RoomTypeEntity(String typeName, int bedNumber, int capacity, int[] amenities) {
@@ -147,6 +155,22 @@ public class RoomTypeEntity implements Serializable {
 
     public void setDisabled() {
         this.disabled = 1;
+    }
+
+    public List<RoomEntity> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<RoomEntity> rooms) {
+        this.rooms = rooms;
+    }
+
+    public List<RoomRateEntity> getRoomrates() {
+        return roomrates;
+    }
+
+    public void setRoomrates(List<RoomRateEntity> roomrates) {
+        this.roomrates = roomrates;
     }
 
 

@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -27,13 +28,15 @@ public class RoomRateEntity implements Serializable {
     @Column(length = 32, nullable = false)
     private String name;
     @Column(length = 32, nullable = false)
-    private int roomType;
-    @Column(length = 32, nullable = false)
     private int rateType;
+    @Column(length = 32, nullable = false)
+    private int roomType;
     @Column(length = 32, nullable = false)
     private int ratePerNight;
     @Column
     private Calendar validityPeriod;
+    @ManyToOne
+    private RoomTypeEntity roomstype;
 
     public RoomRateEntity() {
     }
@@ -124,6 +127,14 @@ public class RoomRateEntity implements Serializable {
 
     public void setValidityPeriod(Calendar validityPeriod) {
         this.validityPeriod = validityPeriod;
+    }
+
+    public RoomTypeEntity getRoomsType() {
+        return roomstype;
+    }
+
+    public void setRoomsType(RoomTypeEntity roomsType) {
+        this.roomstype = roomsType;
     }
     
 }
