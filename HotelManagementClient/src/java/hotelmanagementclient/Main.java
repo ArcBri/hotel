@@ -5,6 +5,7 @@
  */
 package hotelmanagementclient;
 
+import util.RoomTypeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 
 /**
@@ -18,7 +19,7 @@ public class Main {
      * @throws util.exception.InvalidLoginCredentialException
      */
     
-     public static void main(String[] args) throws InvalidLoginCredentialException {
+     public static void main(String[] args) throws InvalidLoginCredentialException, RoomTypeNotFoundException {
         mainApp MainApp = new mainApp();
         MainApp.run();
     }

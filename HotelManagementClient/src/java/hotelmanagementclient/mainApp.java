@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import util.RoomTypeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 
 /**
@@ -30,6 +31,7 @@ class mainApp {
     private EmployeeEntity loggedInEmployee;
     private Long EmployeeId;
     private List<EmployeeEntity> employeeList;
+    private boolean ongoing = true;
     
     private final EmployeeBeanRemote employeebean = lookupEmployeeBeanRemote();
     private final RoomTypeBeanRemote roomtypebean = lookupRoomTypeBeanRemote();
@@ -37,7 +39,7 @@ class mainApp {
     public mainApp() {
     }
 
-    public void run() throws InvalidLoginCredentialException {
+    public void run() throws InvalidLoginCredentialException, RoomTypeNotFoundException {
         while (end == false) {
             if (state == false) {
                 System.out.print("Enter Username:");
@@ -51,11 +53,14 @@ class mainApp {
                 EmployeeId = loggedInEmployee.getEmployeeId();
                 state = true;
             } else if (state == true) {
+                System.out.println();
                 System.out.println("Choose Option");
                 System.out.println("1) Create Employee");
                 System.out.println("2) View All Employees");
                 System.out.println("3) Create a New Room Type");
                 System.out.println("4) View All Room Types");
+                System.out.println("5) View a Room Type Description");
+                System.out.println("6) Update details of a Room Type");
                 System.out.println("0) Log Out");
                 int choice = sc.nextInt();
                 switch (choice) {
@@ -72,6 +77,12 @@ class mainApp {
                         viewAllRoomTypes();
                         break;
                         //edit a type A
+                    case 5:
+                        viewRoomTypeDetails();
+                        break;
+                    case 6:
+                        updateRoomTypeDetails();
+                        break;
                     case 0:
                         state = false;
                         System.out.println("End Application? Y/N");
@@ -122,10 +133,65 @@ class mainApp {
     
     private void viewAllRoomTypes() {
         List<RoomTypeEntity> RoomTypesList = roomtypebean.viewAllRoomTypes();
+        int count = 1;
         for(RoomTypeEntity r: RoomTypesList){
-            System.out.println("Room Type: " + r.getTypeName() + ", Room Description: " + r.getTypeDescription() + ", Room Size: " + r.getSize() + ", Number of Beds: " + r.getBedNumber() + ", Capacity of Room: " + r.getCapacity());
+            System.out.println(count + ") "+ r.getTypeName());
+            count++;
         }
         //edit a type B
+    }
+    
+    private void viewRoomTypeDetails() throws RoomTypeNotFoundException {
+        System.out.println("Enter the name of the Room Type: ");
+        sc.nextLine();
+        String typename = sc.nextLine();
+        RoomTypeEntity r = roomtypebean.getRoomTypeDetails(typename);
+        System.out.println("Room Type: " + r.getTypeName() + ", Room Description: " + r.getTypeDescription() + ", Room Size: " + r.getSize() + ", Number of Beds: " + r.getBedNumber() + ", Capacity of Room: " + r.getCapacity());
+    }
+    
+    private void updateRoomTypeDetails() throws RoomTypeNotFoundException {
+        System.out.println("Enter the name of the Room Type to be Updated: ");
+        sc.nextLine();
+        String typename = sc.nextLine();
+        RoomTypeEntity r = roomtypebean.getRoomTypeDetails(typename);
+        while(ongoing == true){
+            System.out.println("1) Room Description: " + r.getTypeDescription());
+            System.out.println("2) Room Size: " + r.getSize());
+            System.out.println("3) Number of Beds: " + r.getBedNumber());
+            System.out.println("4) Capacity of Room: " + r.getCapacity());
+            System.out.println("0) Save changes and exit updater");
+            int response = sc.nextInt();
+            sc.nextLine();
+            if(response == 0){
+                ongoing = false;
+                System.out.println("Changes Saved");
+            }
+            else{
+                switch (response){
+                    case 1:
+                        System.out.println("Enter new Room Description:");
+                        String newdesc = sc.nextLine();
+                        r.setTypeDescription(newdesc);
+                        break;
+                    case 2:
+                        System.out.println("Enter new Room Size:");
+                        String newsize = sc.nextLine();
+                        r.setSize(newsize);
+                        break;
+                    case 3:
+                        System.out.println("Enter new number of Beds:");
+                        int newnum = sc.nextInt();
+                        r.setBedNumber(newnum);
+                        break;
+                    case 4:
+                        System.out.println("Enter new Capacity of Room:");
+                        int newcap =  sc.nextInt();
+                        r.setCapacity(newcap);
+                        break;
+            }
+                roomtypebean.updateRoomTypeDetails(r);
+            }
+        }
     }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {

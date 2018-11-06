@@ -6,11 +6,15 @@
 package Stateless;
 
 import Entity.RoomTypeEntity;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Scanner;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.RoomTypeNotFoundException;
 
 /**
  *
@@ -21,6 +25,8 @@ public class RoomTypeBean implements RoomTypeBeanRemote, RoomTypeBeanLocal {
 
     @PersistenceContext(unitName = "Hotel-ejbPU")
     private EntityManager em;
+    private String storage;
+    Scanner sc = new Scanner(System.in);
 
     public void persist(Object object) {
         em.persist(object);
@@ -35,6 +41,24 @@ public class RoomTypeBean implements RoomTypeBeanRemote, RoomTypeBeanLocal {
     public List<RoomTypeEntity> viewAllRoomTypes(){
         Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt");
         return query.getResultList();
+    }
+    
+    @Override
+    public RoomTypeEntity getRoomTypeDetails(String typename) throws RoomTypeNotFoundException
+    {
+        try{
+        return (RoomTypeEntity) em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.typeName LIKE :roomtypename").setParameter("roomtypename", typename).getSingleResult();
+        }
+        catch(NoResultException ex){
+            throw new RoomTypeNotFoundException("Room Type does not Exist.");
+        }
+    }
+    
+    @Override
+    public void updateRoomTypeDetails(RoomTypeEntity rt){
+        
+        em.merge(rt);
+        em.flush();
     }
     
     
