@@ -61,6 +61,12 @@ public class RoomTypeBean implements RoomTypeBeanRemote, RoomTypeBeanLocal {
         em.flush();
     }
     
+    @Override
+    public void deleteRoomType(String typename) {
+        RoomTypeEntity roomtype = (RoomTypeEntity) em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.typeName LIKE :roomtypename").setParameter("roomtypename", typename).getSingleResult();
+        em.remove(roomtype);
+        em.flush();
+    }
     
 
     // Add business logic below. (Right-click in editor and choose

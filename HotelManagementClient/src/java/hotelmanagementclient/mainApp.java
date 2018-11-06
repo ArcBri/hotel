@@ -9,6 +9,7 @@ import Entity.EmployeeEntity;
 import Entity.RoomTypeEntity;
 import Stateless.EmployeeBeanRemote;
 import Stateless.RoomTypeBeanRemote;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -57,10 +58,7 @@ class mainApp {
                 System.out.println("Choose Option");
                 System.out.println("1) Create Employee");
                 System.out.println("2) View All Employees");
-                System.out.println("3) Create a New Room Type");
-                System.out.println("4) View All Room Types");
-                System.out.println("5) View a Room Type Description");
-                System.out.println("6) Update details of a Room Type");
+                System.out.println("3) View Room Type Operations");
                 System.out.println("0) Log Out");
                 int choice = sc.nextInt();
                 switch (choice) {
@@ -71,17 +69,29 @@ class mainApp {
                         viewEmployees();
                         break;
                     case 3:
-                        createNewRoomType();
-                        break;
-                    case 4:
-                        viewAllRoomTypes();
-                        break;
-                        //edit a type A
-                    case 5:
-                        viewRoomTypeDetails();
-                        break;
-                    case 6:
-                        updateRoomTypeDetails();
+                        System.out.println("1) Create a New Room Type");
+                        System.out.println("2) View All Room Types");
+                        System.out.println("3) View details of a Room Type");
+                        System.out.println("4) Update details of a Room Type");
+                        System.out.println("5) Delete or Disable a Room Type");
+                        int choice2 = sc.nextInt();
+                        switch (choice2) {
+                            case 1:
+                                createNewRoomType();
+                                break;
+                            case 2:
+                                viewAllRoomTypes();
+                                break;
+                            case 3:
+                                viewRoomTypeDetails();
+                                break;
+                            case 4:
+                                updateRoomTypeDetails();
+                                break;
+                            case 5:
+                                deleteRoomType();
+                                break;
+                        }
                         break;
                     case 0:
                         state = false;
@@ -115,7 +125,7 @@ class mainApp {
     }
     
     private void createNewRoomType() {
-        System.out.println("Enter name of room type:(Deluxe Room, Premier Room, Family Room, Junior Suite, Grand Suite");
+        System.out.println("Enter name of room type:(Deluxe Room, Premier Room, Family Room, Junior Suite, Grand Suite)");
         sc.nextLine();
         String g = sc.nextLine();
         System.out.println("Enter description of room type:");
@@ -126,9 +136,23 @@ class mainApp {
         int m = sc.nextInt();
         System.out.println("Enter capacity of room:");
         int n = sc.nextInt();
-        //add amenities later
-        RoomTypeEntity roomtype = new RoomTypeEntity(g, b, a, m, n);
+        System.out.println("Enter number of each type of amenity in order:");
+        System.out.println("0 - \"The World\" Brand Timepiece clock");
+        System.out.println("1 - \"Sunlight Yellow\" Brand Hair Dryer");
+        System.out.println("2 - \"Hermit Purple\" Provider Wifi");
+        System.out.println("3 - \"Star Platinum\" Brand ORA(L) Care (Toothbrush and Toothpaste)");
+        System.out.println("4 - \"Shining Diamond\" Brand Iron and Ironing Board");
+        System.out.println("5 - \"Gold Experience\" Brand Slippers and Bathrobe");
+        System.out.println("6 - \"Stone Free\" Brand Towels");
+        System.out.println("7 - \"Tusk\" Brand Nail Clippers");
+        System.out.println("8 - \"Soft and Wet\" Brand Soap and Shampoo");
+        int[] amenities = new int[9];
+        for(int i = 0; i < 9; i++){
+            amenities[i] = sc.nextInt();
+        }
+        RoomTypeEntity roomtype = new RoomTypeEntity(g, b, a, m, n, amenities);
         roomtypebean.createRoomType(roomtype);
+        
     }
     
     private void viewAllRoomTypes() {
@@ -138,7 +162,6 @@ class mainApp {
             System.out.println(count + ") "+ r.getTypeName());
             count++;
         }
-        //edit a type B
     }
     
     private void viewRoomTypeDetails() throws RoomTypeNotFoundException {
@@ -147,6 +170,7 @@ class mainApp {
         String typename = sc.nextLine();
         RoomTypeEntity r = roomtypebean.getRoomTypeDetails(typename);
         System.out.println("Room Type: " + r.getTypeName() + ", Room Description: " + r.getTypeDescription() + ", Room Size: " + r.getSize() + ", Number of Beds: " + r.getBedNumber() + ", Capacity of Room: " + r.getCapacity());
+        System.out.println("Amenities: " + Arrays.toString(r.getAmenities())); //update for easier viewing
     }
     
     private void updateRoomTypeDetails() throws RoomTypeNotFoundException {
@@ -188,10 +212,26 @@ class mainApp {
                         int newcap =  sc.nextInt();
                         r.setCapacity(newcap);
                         break;
-            }
+                    case 5:
+                        System.out.println("Enter new Amenities in order:");
+                        int[] amenities = new int[9];
+                        for(int i = 0; i < 9; i++){
+                            amenities[i] = sc.nextInt();
+                        }
+                        r.setAmenities(amenities);
+                        break; 
+                }
                 roomtypebean.updateRoomTypeDetails(r);
             }
         }
+    }
+    
+    private void deleteRoomType() {
+        sc.nextLine();
+        System.out.println("Enter the name of the Room Type to be deleted:");
+        String type = sc.nextLine();
+        roomtypebean.deleteRoomType(type);
+        System.out.println("Room Type \"" + type +"\" Deleted");
     }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {
