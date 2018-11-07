@@ -1,3 +1,8 @@
 /HotelLibrary/build/
+<<<<<<< HEAD
 /TestGuestSite/nbproject/private/
 /TestGuestSite/dist/
+=======
+/HotelManagementClient/nbproject/private/private.xml
+/Hotel-ejb/nbproject/private/private.xml
+>>>>>>> juseng
