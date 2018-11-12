@@ -14,5 +14,9 @@ import Entity.EmployeeEntity;
 public interface EmployeeBeanLocal {
 
     public Long createEmployeeEntity(EmployeeEntity newEmployeeEntity);
+
+    public EmployeeEntity retrieveLinkedAccount(String name);
+
+    public EmployeeEntity getReserver();
     
 }

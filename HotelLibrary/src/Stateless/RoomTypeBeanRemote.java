@@ -8,6 +8,7 @@ package Stateless;
 import Entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.Remote;
+import util.RoomTypeNotFoundException;
 
 /**
  *
@@ -20,4 +21,9 @@ public interface RoomTypeBeanRemote {
 
     public Long createRoomType(RoomTypeEntity newRoomTypeEntity);
     
+    public RoomTypeEntity getRoomTypeDetails(String typename)throws RoomTypeNotFoundException;
+    
+    public void updateRoomTypeDetails(RoomTypeEntity rt);
+    
+    public void deleteRoomType(String typename);
 }

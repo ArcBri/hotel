@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Stateless;
+package Singleton;
 
-import Entity.RoomTypeEntity;
+import Entity.BookingOrder;
 import javax.ejb.Local;
 
 /**
  *
- * @author user
+ * @author Joshua
  */
 @Local
-public interface RoomTypeBeanLocal {
+public interface hotelOperationsLocal {
 
-    public RoomTypeEntity getRoomTypeByName(String typename);
+    public void queueBooking(BookingOrder a);
     
 }

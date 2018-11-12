@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Stateless;
+package Stateful;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author Joshua
  */
-@Local
-public interface SampleBookingControllerLocal {
+@Remote
+public interface hotelReservationsRemote {
     
 }

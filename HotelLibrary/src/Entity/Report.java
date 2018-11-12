@@ -6,39 +6,32 @@
 package Entity;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
-import java.util.List;
-import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 /**
  *
  * @author Joshua
  */
 @Entity
-public class dayTracker implements Serializable {
+public class Report implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private GregorianCalendar day;
-    @ManyToMany(mappedBy="dayBooked", cascade=ALL)
-    private List<RoomEntity> roomsBooked;
+    @Column
+    private int exception; //0- no problem 1- roomtype full but can upgrade 2-cant upgrade
 
-    public dayTracker(GregorianCalendar day, List<RoomEntity> roomsBooked) {
-        this.day = day;
-        this.roomsBooked = roomsBooked;
+    public Report(int exception) {
+        this.exception = exception;
     }
 
-
-    public dayTracker() {
+    public Report() {
     }
-
 
     public Long getId() {
         return id;
@@ -58,10 +51,10 @@ public class dayTracker implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof dayTracker)) {
+        if (!(object instanceof Report)) {
             return false;
         }
-        dayTracker other = (dayTracker) object;
+        Report other = (Report) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -70,25 +63,15 @@ public class dayTracker implements Serializable {
 
     @Override
     public String toString() {
-        return "Entity.dayTracker[ id=" + id + " ]";
+        return "Entity.Report[ id=" + id + " ]";
     }
 
-    public List<RoomEntity> getRoomsBooked() {
-        return roomsBooked;
+    public int getException() {
+        return exception;
     }
 
-    public void setRoomsBooked(List<RoomEntity> roomsBooked) {
-        this.roomsBooked = roomsBooked;
+    public void setException(int exception) {
+        this.exception = exception;
     }
-
-    public GregorianCalendar getDay() {
-        return day;
-    }
-
-    public void setDay(GregorianCalendar day) {
-        this.day = day;
-    }
-
-
     
 }

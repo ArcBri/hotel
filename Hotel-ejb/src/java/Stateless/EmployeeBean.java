@@ -30,6 +30,8 @@ public class EmployeeBean implements EmployeeBeanRemote, EmployeeBeanLocal {
     @PersistenceContext(unitName = "Hotel-ejbPU")
     private EntityManager em;
 
+    private EmployeeEntity loggedInEntity;
+    
     public void persist(Object object) {
         em.persist(object);
     }
@@ -64,6 +66,12 @@ public class EmployeeBean implements EmployeeBeanRemote, EmployeeBeanLocal {
 
     }
     @Override
+    public EmployeeEntity retrieveLinkedAccount(String name) {
+        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.firstname = :inUsername");
+        query.setParameter("inUsername", name);
+        return (EmployeeEntity) query.getSingleResult();
+    }
+    @Override
     public EmployeeEntity staffLogin(String username, String password)throws InvalidLoginCredentialException{
     
        
@@ -72,6 +80,7 @@ public class EmployeeBean implements EmployeeBeanRemote, EmployeeBeanLocal {
             
             if(staffEntity.getPassword().equals(password))
             {                
+                loggedInEntity=staffEntity;
                 return staffEntity;
             }else{
                 throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
@@ -89,6 +98,10 @@ public class EmployeeBean implements EmployeeBeanRemote, EmployeeBeanLocal {
         em.flush(); //for identity primary key must flush before exit method
         
         return newEmployeeEntity.getEmployeeId(); //ctrl space auto complete
+    }
+    @Override
+    public EmployeeEntity getReserver(){
+        return loggedInEntity;
     }
 
 

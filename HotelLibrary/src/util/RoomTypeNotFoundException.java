@@ -3,18 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Stateless;
-
-import Entity.RoomTypeEntity;
-import javax.ejb.Local;
+package util;
 
 /**
  *
  * @author user
  */
-@Local
-public interface RoomTypeBeanLocal {
-
-    public RoomTypeEntity getRoomTypeByName(String typename);
+public class RoomTypeNotFoundException extends Exception{
+    
+    public RoomTypeNotFoundException() {
+    }
+    
+    public RoomTypeNotFoundException(String message) {
+        super(message);
+    }
     
 }

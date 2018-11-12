@@ -3,8 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/IS2103Projects/Hotel/HotelLibrary/src/Stateless/GuestControllerRemote.java</file>
-            <file>file:/D:/IS2103Projects/Hotel/HotelLibrary/src/Entity/GuestEntity.java</file>
+            <file>file:/D:/IS2103Projects/Hotel/HotelLibrary/src/Entity/BookingOrder.java</file>
+            <file>file:/D:/IS2103Projects/Hotel/HotelLibrary/src/Entity/RoomEntity.java</file>
+            <file>file:/D:/IS2103Projects/Hotel/HotelLibrary/src/Entity/RoomTypeEntity.java</file>
         </group>
     </open-files>
 </project-private>

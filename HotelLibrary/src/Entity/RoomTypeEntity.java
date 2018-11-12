@@ -38,7 +38,7 @@ public class RoomTypeEntity implements Serializable {
     @Column(length = 32, nullable = false)
     private int capacity;
     @Column
-    private int[] amenities=new int[10];
+    private int[] amenities=new int[9];
     @OneToMany(mappedBy="roomtype", cascade={PERSIST, MERGE})
     private List<RoomEntity> rooms;
     @OneToMany(mappedBy="roomstype", cascade={PERSIST, MERGE})
@@ -51,12 +51,13 @@ public class RoomTypeEntity implements Serializable {
     public RoomTypeEntity() {
     }
 
-    public RoomTypeEntity(String typeName, String typeDescription, String size, int bedNumber, int capacity) {
+    public RoomTypeEntity(String typeName, String typeDescription, String size, int bedNumber, int capacity, int[] amenities) {
         this.typeName = typeName;
         this.typeDescription = typeDescription;
         this.size = size;
         this.bedNumber = bedNumber;
         this.capacity = capacity;
+        this.amenities = amenities;
     }
     
 

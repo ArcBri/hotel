@@ -6,13 +6,14 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
-import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 /**
@@ -26,25 +27,31 @@ public class BookingOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
-    @ManyToMany(cascade=ALL, mappedBy="booking")
-    private List<dayTracker> bookedDays;
-    @ManyToOne
+    @Column(nullable=false)
+    private String typeName;
+    @Column(nullable = false)
+    private List<GregorianCalendar> dayBooked;
+    @ManyToOne(optional = true)
     private EmployeeEntity employee;
-    @ManyToOne
+    @ManyToOne(optional = true)
     private GuestEntity guest;
 
     public BookingOrder() {
     }
 
-    public BookingOrder(List<dayTracker> bookedDays, EmployeeEntity employee) {
-        this.bookedDays = bookedDays;
+    public BookingOrder(String typeName, EmployeeEntity employee) {
+        this.typeName = typeName;
+        this.dayBooked = new ArrayList<GregorianCalendar>();
         this.employee = employee;
     }
 
-    public BookingOrder(List<dayTracker> bookedDays, GuestEntity guest) {
-        this.bookedDays = bookedDays;
+    public BookingOrder(String typeName, GuestEntity guest) {
+        this.typeName = typeName;
+        this.dayBooked = new ArrayList<GregorianCalendar>();
         this.guest = guest;
     }
+
+
     
     
 
@@ -81,13 +88,7 @@ public class BookingOrder implements Serializable {
         return "Entity.BookingOrder[ id=" + orderId + " ]";
     }
 
-    public List<dayTracker> getBookedDays() {
-        return bookedDays;
-    }
 
-    public void setBookedDays(List<dayTracker> bookedDays) {
-        this.bookedDays = bookedDays;
-    }
 
     public EmployeeEntity getEmployee() {
         return employee;
@@ -103,6 +104,22 @@ public class BookingOrder implements Serializable {
 
     public void setGuest(GuestEntity guest) {
         this.guest = guest;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public List<GregorianCalendar> getDayBooked() {
+        return dayBooked;
+    }
+
+    public void setDayBooked(List<GregorianCalendar> dayBooked) {
+        this.dayBooked = dayBooked;
     }
     
 }
