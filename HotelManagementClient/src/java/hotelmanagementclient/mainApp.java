@@ -6,10 +6,16 @@
 package hotelmanagementclient;
 
 import Entity.EmployeeEntity;
+import Entity.RoomEntity;
+import Entity.RoomRateEntity;
 import Entity.RoomTypeEntity;
 import Stateless.EmployeeBeanRemote;
+import Stateless.RoomBeanRemote;
+import Stateless.RoomRateBeanRemote;
 import Stateless.RoomTypeBeanRemote;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -36,6 +42,8 @@ class mainApp {
     
     private final EmployeeBeanRemote employeebean = lookupEmployeeBeanRemote();
     private final RoomTypeBeanRemote roomtypebean = lookupRoomTypeBeanRemote();
+    private final RoomBeanRemote roombean = lookupRoomBeanRemote();
+    private final RoomRateBeanRemote roomratebean = lookupRoomRateBeanRemote();
 
     public mainApp() {
     }
@@ -59,6 +67,9 @@ class mainApp {
                 System.out.println("1) Create Employee");
                 System.out.println("2) View All Employees");
                 System.out.println("3) View Room Type Operations");
+                System.out.println("4) View Room Operations");
+                System.out.println("5) View Room Rate Operations");
+                System.out.println("6) View Room Allocation Exception Report"); //to add
                 System.out.println("0) Log Out");
                 int choice = sc.nextInt();
                 switch (choice) {
@@ -69,6 +80,7 @@ class mainApp {
                         viewEmployees();
                         break;
                     case 3:
+                        System.out.println();
                         System.out.println("1) Create a New Room Type");
                         System.out.println("2) View All Room Types");
                         System.out.println("3) View details of a Room Type");
@@ -90,6 +102,54 @@ class mainApp {
                                 break;
                             case 5:
                                 deleteRoomType();
+                                break;
+                        }
+                        break;
+                    case 4:
+                        System.out.println();
+                        System.out.println("1) Create a New Room");
+                        System.out.println("2) View All Rooms");
+                        System.out.println("3) Update details and status of a Room");
+                        System.out.println("4) Delete a Room Record");
+                        int choice3 = sc.nextInt();
+                        switch (choice3) {
+                            case 1:
+                                createNewRoom();
+                                break;
+                            case 2:
+                                viewAllRooms();
+                                break;
+                            case 3:
+                                updateRoomDetails();
+                                break;
+                            case 4:
+                                deleteRoom();
+                                break;
+                        }
+                        break;
+                    case 5:
+                        System.out.println();
+                        System.out.println("1) Create a New Room Rate Record");
+                        System.out.println("2) View All Room Rate Records");
+                        System.out.println("3) View the details of a Room Rate");
+                        System.out.println("4) Update details of a Room Rate Record");
+                        System.out.println("5) Delete a Room Rate Record");
+                        int choice4 = sc.nextInt();
+                        switch (choice4) {
+                            case 1:
+                                createNewRoomRate();
+                                break;
+                            case 2:
+                                viewAllRoomRates();
+                                break;
+                            case 3: 
+                                viewRoomRateDetails();
+                                break;
+                            case 4:
+                                updateRoomRateDetails();
+                                break;
+                            case 5:
+                                deleteRoomRate();
                                 break;
                         }
                         break;
@@ -174,6 +234,7 @@ class mainApp {
     }
     
     private void updateRoomTypeDetails() throws RoomTypeNotFoundException {
+        Boolean ongoing = true;
         System.out.println("Enter the name of the Room Type to be Updated: ");
         sc.nextLine();
         String typename = sc.nextLine();
@@ -233,6 +294,227 @@ class mainApp {
         roomtypebean.deleteRoomType(type);
         System.out.println("Room Type \"" + type +"\" Deleted");
     }
+    
+    private void createNewRoom() {
+        sc.nextLine();
+        System.out.println("Enter the Room Type of the new Room:");
+        String t = sc.nextLine();
+        System.out.println("Enter the Floor Number of the new Room");
+        int f = sc.nextInt();
+        System.out.println("Enter the Room Number of the new Room");
+        int r = sc.nextInt();
+        RoomEntity room = new RoomEntity(t, f, r);
+        roombean.createRoom(room);
+    }
+    
+    private void viewAllRooms() {
+        List<RoomEntity> RoomList = roombean.viewAllRooms();
+        int count = 1;
+        for(RoomEntity r: RoomList){
+            System.out.println(count + ") Room "+ r.getFinalNumber());
+            count++;
+        }
+    }
+    
+    private void updateRoomDetails() {
+        Boolean ongoing = true;
+        System.out.println("Enter the Number of the Room to be edited: ");
+        int roomnumber = sc.nextInt();
+        RoomEntity rm = roombean.getRoomDetails(roomnumber);
+        while(ongoing == true){
+            System.out.println("1) Room Type: " + rm.getRoomType());
+            System.out.println("2) Room Available: " + rm.isRoomAvailable());
+            System.out.println("0) Save changes and exit updater");
+            int response = sc.nextInt();
+            sc.nextLine();
+            if(response == 0){
+                ongoing = false;
+                System.out.println("Changes Saved");
+            }
+            else{
+                switch (response){
+                    case 1:
+                        System.out.println("Enter new Room Type:");
+                        String newtype = sc.nextLine();
+                        rm.setRoomType(newtype);
+                        break;
+                    case 2:
+                        System.out.println("Enter updated Room Availability:");
+                        Boolean newavail = sc.nextBoolean();
+                        rm.setRoomAvailable(newavail);
+                        break;
+                }
+                roombean.updateRoomDetails(rm);
+            }
+        }
+    }
+    
+    public void deleteRoom() {
+        System.out.println("Enter the room number of the Room to be deleted: ");
+        int roomnumber = sc.nextInt();
+        roombean.deleteRoom(roomnumber);
+        System.out.println("Room " + roomnumber + " Deleted");
+    }
+    
+    public void createNewRoomRate() {
+        System.out.println("Enter name of room rate: ");
+        sc.nextLine();
+        String j = sc.nextLine();
+        System.out.println("Enter the room type: (Deluxe Room, Premier Room, Family Room, Junior Suite, Grand Suite)");
+        String k = sc.nextLine();
+        System.out.println("Enter the type of rate: (Published Rate, Normal Rate, Peak Rate, Promotion Rate)");
+        String o = sc.nextLine();
+        System.out.println("Enter the rate per night:");
+        int y = sc.nextInt();
+        RoomRateEntity roomrate = new RoomRateEntity(j, k, o, y);
+        System.out.println("Enter the validity period? (Y/N)");
+        String option = sc.next();
+        if (option.equals("Y")) {
+            roomrate.setValidity(true);
+            System.out.println("Enter the Starting Date (YYYY MM DD)");
+            int startyear = sc.nextInt();
+            int startmonth = sc.nextInt();
+            startmonth--;
+            int startday = sc.nextInt();
+            GregorianCalendar startdate = new GregorianCalendar(startyear, startmonth, startday);
+            System.out.println("Enter the Ending Date (YYYY MM DD)");
+            int endyear = sc.nextInt();
+            int endmonth = sc.nextInt();
+            endmonth--;
+            int endday = sc.nextInt();
+            GregorianCalendar enddate = new GregorianCalendar(endyear, endmonth, endday);
+            roomrate.setValidityStart(startdate);
+            roomrate.setValidityEnd(enddate);
+        }
+
+        roomratebean.createRoomRate(roomrate);
+    }
+    
+    public void viewAllRoomRates() {
+       List<RoomRateEntity> RoomRateList = roomratebean.viewAllRoomRates();
+        int count = 1;
+        for(RoomRateEntity rr: RoomRateList){
+            System.out.println(count + ") ("+ rr.getRateType() + ") " + rr.getName());
+            count++; 
+        }
+    }
+    
+    public void viewRoomRateDetails() {
+        System.out.println("Enter the name of the Room Rate: ");
+        sc.nextLine();
+        String name = sc.nextLine();
+        RoomRateEntity rate = roomratebean.getDetails(name);
+        System.out.println("Name: " + rate.getName() + ", Room Type: " + rate.getRoomType() + ", Rate Type: " + rate.getRateType() + ", Rate per Night: " + rate.getRatePerNight());
+        if (rate.getValidity() == true) {
+            int startmonthcast = rate.getValidityStart().get(Calendar.MONTH);
+            startmonthcast++;
+            int endmonthcast = rate.getValidityEnd().get(Calendar.MONTH);
+            endmonthcast++;
+            System.out.println("Rate valid from: " + rate.getValidityStart().get(Calendar.YEAR) + "/" + startmonthcast + "/" + rate.getValidityStart().get(Calendar.DATE) + " to " + rate.getValidityEnd().get(Calendar.YEAR) + "/" + endmonthcast + "/" + rate.getValidityEnd().get(Calendar.DATE));
+        }
+        else {
+            System.out.println("Prevailing Rate (Always Valid)");
+        }
+    }
+    public void updateRoomRateDetails() {
+        System.out.println("Enter the name of the Room Rate to be updated: ");
+        sc.nextLine();
+        String name = sc.nextLine();
+        RoomRateEntity rate = roomratebean.getDetails(name);
+        while(ongoing == true){
+            System.out.println("1) Rate Name: " + rate.getName());
+            System.out.println("2) Room Type: " + rate.getRoomType());
+            System.out.println("3) Rate Type: " + rate.getRateType());
+            System.out.println("4) Rate per night: " + rate.getRatePerNight());
+            if (rate.getValidity() == true) {
+                int startmonthcast = rate.getValidityStart().get(Calendar.MONTH);
+                startmonthcast++;
+                int endmonthcast = rate.getValidityEnd().get(Calendar.MONTH);
+                endmonthcast++;
+                System.out.println("5) Starting Date: " + rate.getValidityStart().get(Calendar.YEAR) + "/" + startmonthcast + "/" + rate.getValidityStart().get(Calendar.DATE));
+                System.out.println("6) Ending Date: " + rate.getValidityEnd().get(Calendar.YEAR) + "/" + endmonthcast + "/" + rate.getValidityEnd().get(Calendar.DATE));
+                System.out.println("7) Remove Validity Period");
+            }
+            else {
+                System.out.println("5) Add a Starting Date ");
+                System.out.println("6) Add an Ending Date ");
+            }
+            System.out.println("0) Save changes and exit updater");
+            int response = sc.nextInt();
+            sc.nextLine();
+            if(response == 0){
+                ongoing = false;
+                System.out.println("Changes Saved");
+            }
+            else{
+                switch (response){
+                    case 1:
+                        System.out.println("Enter new Rate Name: ");
+                        String newname = sc.nextLine();
+                        rate.setName(newname);
+                        break;
+                    case 2:
+                        System.out.println("Enter updated Room Type: ");
+                        String newtype = sc.nextLine();
+                        rate.setRoomType(newtype);
+                        break;
+                    case 3:
+                        System.out.println("Enter new Rate Type: ");
+                        String newratetype = sc.nextLine();
+                        rate.setRateType(newratetype);
+                        break;
+                    case 4:
+                        System.out.println("Enter new Rate Per Night: ");
+                        int newrpn = sc.nextInt();
+                        sc.nextLine();
+                        rate.setRatePerNight(newrpn);
+                        break;
+                    case 5:
+                        System.out.println("Enter new Starting Date: (YYYY MM DD)");
+                        int newyear = sc.nextInt();
+                        int newmonth = sc.nextInt();
+                        newmonth--;
+                        int newday = sc.nextInt();
+                        sc.nextLine();
+                        GregorianCalendar newstart = new GregorianCalendar(newyear, newmonth, newday);
+                        rate.setValidityStart(newstart);
+                        if (rate.getValidity() == false) {
+                            rate.setValidity(true);
+                        }
+                        break;
+                    case 6:
+                        System.out.println("Enter new Ending Date: (YYYY MM DD)");
+                        int neweryear = sc.nextInt();
+                        int newermonth = sc.nextInt();
+                        newermonth--;
+                        int newerday = sc.nextInt();
+                        sc.nextLine();
+                        GregorianCalendar newend = new GregorianCalendar(neweryear, newermonth, newerday);
+                        rate.setValidityEnd(newend);
+                        if (rate.getValidity() == false) {
+                            rate.setValidity(true);
+                        }
+                        break;
+                    case 7:
+                        System.out.println("Delete Validity Period? (Y/N)");
+                        String answer = sc.nextLine();
+                        if (answer.equals("Y")) {
+                            rate.setValidity(false);
+                        }
+                        break;
+                }
+                roomratebean.updateRoomRateDetails(rate);
+            }
+        }
+    }
+    public void deleteRoomRate() {
+        System.out.println("Enter the Name of the Room Rate to be deleted: ");
+        sc.nextLine();
+        String name = sc.nextLine();
+        roomratebean.deleteRoomRate(name);
+        System.out.println("Room Rate Record " + name + " Deleted");
+        
+    }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {
         try {
@@ -254,6 +536,25 @@ class mainApp {
         }
     }
 
+    private RoomBeanRemote lookupRoomBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (RoomBeanRemote) c.lookup("java:comp/env/RoomBeanRemote");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
 
-
+    private RoomRateBeanRemote lookupRoomRateBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (RoomRateBeanRemote) c.lookup("java:comp/env/RoomRateBean");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    
 }
