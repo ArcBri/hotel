@@ -35,6 +35,10 @@ public class dayTracker implements Serializable {
         this.roomsBooked = roomsBooked;
     }
 
+    public dayTracker(GregorianCalendar day) {
+        this.day = day;
+    }
+
 
     public dayTracker() {
     }

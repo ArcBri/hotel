@@ -54,8 +54,14 @@ public class RoomTypeBean implements RoomTypeBeanRemote, RoomTypeBeanLocal {
         }
     }
     @Override
-    public RoomTypeEntity getRoomTypeByName(String typename){
+    public RoomTypeEntity getRoomTypeByName(String typename) throws RoomTypeNotFoundException
+    {
+        try{
         return (RoomTypeEntity) em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.typeName LIKE :roomtypename").setParameter("roomtypename", typename).getSingleResult();
+        }
+        catch(NoResultException ex){
+            throw new RoomTypeNotFoundException("Room Type does not Exist.");
+        }
     }
     
     @Override

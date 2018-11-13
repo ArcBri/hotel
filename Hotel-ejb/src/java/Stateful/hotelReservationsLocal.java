@@ -5,6 +5,9 @@
  */
 package Stateful;
 
+import Entity.RoomEntity;
+import java.util.GregorianCalendar;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +16,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface hotelReservationsLocal {
+
+    public void actuallyBookTheRoom(RoomEntity roomToBook, List<GregorianCalendar> daysNeeded);
     
 }

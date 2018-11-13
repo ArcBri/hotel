@@ -6,6 +6,7 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
@@ -40,7 +41,7 @@ public class RoomTypeEntity implements Serializable {
     @Column
     private int[] amenities=new int[9];
     @OneToMany(mappedBy="roomtype", cascade={PERSIST, MERGE})
-    private List<RoomEntity> rooms;
+    private List<RoomEntity> rooms = new ArrayList<RoomEntity>();
     @OneToMany(mappedBy="roomstype", cascade={PERSIST, MERGE})
     private List<RoomRateEntity> roomrates;
     private int disabled = 0;

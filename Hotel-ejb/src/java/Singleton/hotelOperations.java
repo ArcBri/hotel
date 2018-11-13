@@ -9,6 +9,7 @@ import Entity.BookingOrder;
 import Entity.RoomEntity;
 import Entity.RoomTypeEntity;
 import Entity.dayTracker;
+import Stateful.hotelReservationsLocal;
 import Stateless.RoomTypeBeanLocal;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -17,6 +18,7 @@ import java.util.Queue;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import util.RoomTypeNotFoundException;
 
 /**
  *
@@ -24,31 +26,35 @@ import javax.ejb.Singleton;
  */
 @Singleton
 public class hotelOperations implements hotelOperationsLocal {
+
+    @EJB
+    private hotelReservationsLocal hotelReservations;
 @EJB
     private RoomTypeBeanLocal roomTypeBean;
+
 
     LinkedList<BookingOrder> roomsneeded=new LinkedList<BookingOrder>();
     Queue<Integer> successfulBookings =new LinkedList<Integer>();    // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Schedule(hour="2")
-    public void generateReport(){
+    public void generateReport() throws RoomTypeNotFoundException{
         int size=roomsneeded.size();
         for(int i=0; i<size; i++){
             BookingOrder currentNeeded = roomsneeded.get(i);
             String typeNeeded =currentNeeded.getTypeName();
             List<GregorianCalendar> dayNeeded =currentNeeded.getDayBooked();
+            GregorianCalendar lastDay=dayNeeded.get(dayNeeded.size()-1);
             RoomTypeEntity needed=roomTypeBean.getRoomTypeByName(typeNeeded);
             List<RoomEntity> room = needed.getRooms();
             for(RoomEntity j:room){
                 List<dayTracker> daysBooked = j.getDayBooked();
                 for(dayTracker k: daysBooked){
                     for(GregorianCalendar l : dayNeeded){
-                        if(k.getDay().equals(l)==false){
-                        //bookRoom
-                        successfulBookings.add(i);
+                        if(k.getDay().equals(l)){
                         break;
-                    }else{
-                        //check 1 class above
+                    }else if (k.getDay().equals(l)==false&&l.equals(lastDay)){
+                        hotelReservations.actuallyBookTheRoom(j, dayNeeded);
+                        successfulBookings.add(i);
                         break;
                     }
                     }

@@ -3,12 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/IS2103Projects/Hotel/Hotel-ejb/src/java/Stateless/EmployeeBeanLocal.java</file>
-            <file>file:/D:/IS2103Projects/Hotel/Hotel-ejb/src/java/Stateful/hotelReservations.java</file>
-            <file>file:/D:/IS2103Projects/Hotel/Hotel-ejb/src/java/Stateful/hotelReservationsLocal.java</file>
-            <file>file:/D:/IS2103Projects/Hotel/Hotel-ejb/src/java/Singleton/hotelOperationsLocal.java</file>
-            <file>file:/D:/IS2103Projects/Hotel/Hotel-ejb/src/java/Singleton/hotelOperations.java</file>
-            <file>file:/D:/IS2103Projects/Hotel/Hotel-ejb/src/java/Stateless/EmployeeBean.java</file>
+            <file>file:/C:/Users/user/Desktop/2103pp/hotel/Hotel-ejb/src/java/Stateless/RoomTypeBean.java</file>
+            <file>file:/C:/Users/user/Desktop/2103pp/hotel/Hotel-ejb/src/java/Stateless/RoomBean.java</file>
         </group>
     </open-files>
 </project-private>

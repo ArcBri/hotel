@@ -9,9 +9,9 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Joshua
+ * @author user
  */
 @Local
-public interface PartnerControllerLocal {
+public interface RoomRateBeanLocal {
     
 }

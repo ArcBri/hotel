@@ -6,6 +6,7 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ public class RoomEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomId;
     @Column(length = 32, nullable = false)
-    private int roomType;
+    private String roomType;
     @Column(length = 32, nullable = false)
     private int floorNumber;
     @Column(length = 32, nullable = false)
@@ -44,12 +45,13 @@ public class RoomEntity implements Serializable {
     public RoomEntity() {
     }
 
-    public RoomEntity(int roomType, int floorNumber, int roomNumber, boolean roomAvailable) {
+    public RoomEntity(String roomType, int floorNumber, int roomNumber) {
         this.roomType = roomType;
         this.floorNumber = floorNumber;
         this.roomNumber = roomNumber;
-        this.roomAvailable = roomAvailable;
+        this.roomAvailable = false;
         this.finalNumber =  floorNumber * 100 + roomNumber;
+        dayBooked=new ArrayList<dayTracker>(0);
     }
     
     
@@ -62,11 +64,11 @@ public class RoomEntity implements Serializable {
         this.roomId = roomId;
     }
 
-    public int getRoomType() {
+    public String getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(int roomType) {
+    public void setRoomType(String roomType) {
         this.roomType = roomType;
     }
 

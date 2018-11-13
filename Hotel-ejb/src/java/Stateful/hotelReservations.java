@@ -7,6 +7,9 @@ package Stateful;
 
 import Entity.BookingOrder;
 import Entity.EmployeeEntity;
+import Entity.GuestEntity;
+import Entity.RoomEntity;
+import Entity.dayTracker;
 import Singleton.hotelOperationsLocal;
 import Stateless.EmployeeBeanLocal;
 import java.util.ArrayList;
@@ -32,16 +35,19 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
 
     @PersistenceContext(unitName = "Hotel-ejbPU")
     private EntityManager em;
+    
+    private EmployeeEntity loggedInEmployee;
+    private GuestEntity loggedInGuest;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    public void bookARoomEmployee(String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay){
-        EmployeeEntity reserver = employeeBean.getReserver();
+    @Override
+    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay){
         BookingOrder newBooking = new BookingOrder(roomType, reserver);
         List<GregorianCalendar> daysBooked=new ArrayList<GregorianCalendar>();
-        GregorianCalendar start = new GregorianCalendar(startYear, startMonth, startDay);
-        GregorianCalendar end = new GregorianCalendar(endYear, endMonth, endDay);
+        GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
+        GregorianCalendar end = new GregorianCalendar(endYear, endMonth-1, endDay);
         daysBooked.add(start);
         while(start.equals(end)==false){
             int i=1;
@@ -53,6 +59,33 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
         em.persist(newBooking);
         hotelOperations.queueBooking(newBooking);
         
+    }
+    @Override
+        public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay){
+        BookingOrder newBooking = new BookingOrder(roomType, reserver);
+        List<GregorianCalendar> daysBooked=new ArrayList<GregorianCalendar>();
+        GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
+        GregorianCalendar end = new GregorianCalendar(endYear, endMonth-1, endDay);
+        daysBooked.add(start);
+        while(start.equals(end)==false){
+            int i=1;
+            GregorianCalendar targetDay = new GregorianCalendar(startYear, startMonth, startDay+i);
+            start=targetDay;
+            daysBooked.add(start);
+        }
+        newBooking.setDayBooked(daysBooked);
+        em.persist(newBooking);
+        hotelOperations.queueBooking(newBooking);
+        
+    }
+    @Override
+    public void actuallyBookTheRoom(RoomEntity roomToBook, List<GregorianCalendar> daysNeeded){
+        for(GregorianCalendar g : daysNeeded){
+            dayTracker bookedDay=new dayTracker(g);
+            roomToBook.getDayBooked().add(bookedDay);
+        }
+        em.persist(roomToBook);
+        em.flush();
     }
 
     public void persist(Object object) {

@@ -7,6 +7,7 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,39 +29,44 @@ public class RoomRateEntity implements Serializable {
     @Column(length = 32, nullable = false)
     private String name;
     @Column(length = 32, nullable = false)
-    private int rateType;
+    private String rateType;
     @Column(length = 32, nullable = false)
-    private int roomType;
+    private String roomType;
     @Column(length = 32, nullable = false)
     private int ratePerNight;
     @Column
-    private Calendar validityPeriod;
+    private GregorianCalendar validityStart = null;
+    @Column
+    private GregorianCalendar validityEnd = null;
     @ManyToOne
     private RoomTypeEntity roomstype;
+    private Boolean validity = false;
 
     public RoomRateEntity() {
     }
 
-    public RoomRateEntity(String name, int roomType, int rateType, int ratePerNight) {
+    public RoomRateEntity(String name, String roomType, String rateType, int ratePerNight) {
         this.name = name;
         this.roomType = roomType;
         this.rateType = rateType;
         this.ratePerNight = ratePerNight;
+        this.validityStart = new GregorianCalendar(1945, 12, 2);
+        this.validityEnd = new GregorianCalendar(2100, 11, 4);
     }
 
-    public RoomRateEntity(String name, int roomType, int rateType, int ratePerNight, Calendar validityPeriod) {
+    public RoomRateEntity(String name, String roomType, String rateType, int ratePerNight, GregorianCalendar validityPeriod) {
         this.name = name;
         this.roomType = roomType;
         this.rateType = rateType;
         this.ratePerNight = ratePerNight;
-        this.validityPeriod = validityPeriod;
+        this.validityStart = validityPeriod;
     }
     
-    public Long getId() {
+    public Long getRoomRateId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setRoomRateId(Long id) {
         this.id = id;
     }
     
@@ -97,19 +103,19 @@ public class RoomRateEntity implements Serializable {
         this.name = name;
     }
 
-    public int getRoomType() {
+    public String getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(int roomType) {
+    public void setRoomType(String roomType) {
         this.roomType = roomType;
     }
 
-    public int getRateType() {
+    public String getRateType() {
         return rateType;
     }
 
-    public void setRateType(int rateType) {
+    public void setRateType(String rateType) {
         this.rateType = rateType;
     }
 
@@ -121,12 +127,12 @@ public class RoomRateEntity implements Serializable {
         this.ratePerNight = ratePerNight;
     }
 
-    public Calendar getValidityPeriod() {
-        return validityPeriod;
+    public GregorianCalendar getValidityStart() {
+        return validityStart;
     }
 
-    public void setValidityPeriod(Calendar validityPeriod) {
-        this.validityPeriod = validityPeriod;
+    public void setValidityStart(GregorianCalendar validityStart) {
+        this.validityStart = validityStart;
     }
 
     public RoomTypeEntity getRoomsType() {
@@ -135,6 +141,22 @@ public class RoomRateEntity implements Serializable {
 
     public void setRoomsType(RoomTypeEntity roomsType) {
         this.roomstype = roomsType;
+    }
+
+    public GregorianCalendar getValidityEnd() {
+        return validityEnd;
+    }
+
+    public void setValidityEnd(GregorianCalendar validityEnd) {
+        this.validityEnd = validityEnd;
+    }
+
+    public Boolean getValidity() {
+        return validity;
+    }
+
+    public void setValidity(Boolean validity) {
+        this.validity = validity;
     }
     
 }

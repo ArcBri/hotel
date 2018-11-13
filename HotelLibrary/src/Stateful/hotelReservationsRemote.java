@@ -5,6 +5,8 @@
  */
 package Stateful;
 
+import Entity.EmployeeEntity;
+import Entity.GuestEntity;
 import javax.ejb.Remote;
 
 /**
@@ -13,5 +15,9 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface hotelReservationsRemote {
-    
+
+    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
+
+    public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
+
 }

@@ -7,6 +7,7 @@ package Stateless;
 
 import Entity.RoomTypeEntity;
 import javax.ejb.Local;
+import util.RoomTypeNotFoundException;
 
 /**
  *
@@ -15,6 +16,6 @@ import javax.ejb.Local;
 @Local
 public interface RoomTypeBeanLocal {
 
-    public RoomTypeEntity getRoomTypeByName(String typename);
+    public RoomTypeEntity getRoomTypeByName(String typename) throws RoomTypeNotFoundException;
     
 }

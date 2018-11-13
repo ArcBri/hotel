@@ -5,13 +5,13 @@
  */
 package Stateless;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
- * @author Joshua
+ * @author user
  */
-@Remote
-public interface PartnerControllerRemote {
+@Local
+public interface RoomBeanLocal {
     
 }
