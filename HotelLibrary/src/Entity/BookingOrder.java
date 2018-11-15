@@ -30,7 +30,9 @@ public class BookingOrder implements Serializable {
     @Column(nullable=false)
     private String typeName;
     @Column(nullable = false)
-    private List<GregorianCalendar> dayBooked;
+    private GregorianCalendar dayBooked;
+    @Column(nullable=false)
+    private int duration;
     @ManyToOne(optional = true)
     private EmployeeEntity employee;
     @ManyToOne(optional = true)
@@ -41,13 +43,11 @@ public class BookingOrder implements Serializable {
 
     public BookingOrder(String typeName, EmployeeEntity employee) {
         this.typeName = typeName;
-        this.dayBooked = new ArrayList<GregorianCalendar>();
         this.employee = employee;
     }
 
     public BookingOrder(String typeName, GuestEntity guest) {
         this.typeName = typeName;
-        this.dayBooked = new ArrayList<GregorianCalendar>();
         this.guest = guest;
     }
 
@@ -114,12 +114,20 @@ public class BookingOrder implements Serializable {
         this.typeName = typeName;
     }
 
-    public List<GregorianCalendar> getDayBooked() {
+    public GregorianCalendar getDayBooked() {
         return dayBooked;
     }
 
-    public void setDayBooked(List<GregorianCalendar> dayBooked) {
+    public void setDayBooked(GregorianCalendar dayBooked) {
         this.dayBooked = dayBooked;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
     
 }

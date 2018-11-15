@@ -7,13 +7,13 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 /**
@@ -37,8 +37,8 @@ public class RoomEntity implements Serializable {
     private int finalNumber;
     @Column
     private boolean roomAvailable;
-    @ManyToMany
-    private List<dayTracker> dayBooked;
+    @Column(nullable=true)
+    private List<GregorianCalendar> dayBooked;
     @ManyToOne
     private RoomTypeEntity roomtype;
 
@@ -51,7 +51,7 @@ public class RoomEntity implements Serializable {
         this.roomNumber = roomNumber;
         this.roomAvailable = false;
         this.finalNumber =  floorNumber * 100 + roomNumber;
-        dayBooked=new ArrayList<dayTracker>(0);
+        dayBooked=new ArrayList<GregorianCalendar>(0);
     }
     
     
@@ -132,11 +132,11 @@ public class RoomEntity implements Serializable {
         return "Entity.RoomEntity[ id=" + roomId + " ]";
     }
 
-    public List<dayTracker> getDayBooked() {
+    public List<GregorianCalendar> getDayBooked() {
         return dayBooked;
     }
 
-    public void setDayBooked(List<dayTracker> dayBooked) {
+    public void setDayBooked(List<GregorianCalendar> dayBooked) {
         this.dayBooked = dayBooked;
     }
 

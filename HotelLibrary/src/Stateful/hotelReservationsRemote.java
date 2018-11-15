@@ -16,8 +16,12 @@ import javax.ejb.Remote;
 @Remote
 public interface hotelReservationsRemote {
 
-    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
 
-    public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
+
+    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration);
+
+    public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration);
+
+    public void doIt();
 
 }

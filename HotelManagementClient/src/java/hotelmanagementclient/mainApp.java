@@ -73,6 +73,7 @@ class mainApp {
                 System.out.println("5) View Room Rate Operations");
                 System.out.println("6) View Room Allocation Exception Report"); //to add
                 System.out.println("7) Book a room");
+                System.out.println("99) Do it");
                 System.out.println("0) Log Out");
                 int choice = sc.nextInt();
                 switch (choice) {
@@ -159,6 +160,8 @@ class mainApp {
                     case 7:
                         bookRoom();
                         break;
+                    case 99:
+                        hotelReserve.doIt();
                     case 0:
                         state = false;
                         System.out.println("End Application? Y/N");
@@ -570,11 +573,10 @@ class mainApp {
         int startYear=sc.nextInt();
         int startMonth=sc.nextInt();
         int startDay=sc.nextInt();
-        System.out.println("Enter check out date in this order : Year, Month, Day");
-        int endYear =sc.nextInt();
-        int endMonth=sc.nextInt();
-        int endDay = sc.nextInt();
-        hotelReserve.bookARoomEmployee(loggedInEmployee, roomType, startYear, startMonth, startDay, endYear, endMonth, endDay);
+        System.out.println("Enter duration of stay");
+        int duration =sc.nextInt();
+        sc.nextLine();
+        hotelReserve.bookARoomEmployee(loggedInEmployee, roomType, startYear, startMonth, startDay, duration);
         
     }
 

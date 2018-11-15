@@ -9,16 +9,17 @@ import Entity.BookingOrder;
 import Entity.EmployeeEntity;
 import Entity.GuestEntity;
 import Entity.RoomEntity;
-import Entity.dayTracker;
 import Singleton.hotelOperationsLocal;
 import Stateless.EmployeeBeanLocal;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.RoomTypeNotFoundException;
 
 /**
  *
@@ -43,49 +44,41 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
     // "Insert Code > Add Business Method")
     
     @Override
-    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay){
+    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration){
         BookingOrder newBooking = new BookingOrder(roomType, reserver);
-        List<GregorianCalendar> daysBooked=new ArrayList<GregorianCalendar>();
         GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
-        GregorianCalendar end = new GregorianCalendar(endYear, endMonth-1, endDay);
-        daysBooked.add(start);
-        while(start.equals(end)==false){
-            int i=1;
-            GregorianCalendar targetDay = new GregorianCalendar(startYear, startMonth, startDay+i);
-            start=targetDay;
-            daysBooked.add(start);
-        }
-        newBooking.setDayBooked(daysBooked);
+        newBooking.setDayBooked(start);
+        newBooking.setDuration(duration);
         em.persist(newBooking);
         hotelOperations.queueBooking(newBooking);
         
     }
     @Override
-        public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay){
+        public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration){
         BookingOrder newBooking = new BookingOrder(roomType, reserver);
-        List<GregorianCalendar> daysBooked=new ArrayList<GregorianCalendar>();
         GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
-        GregorianCalendar end = new GregorianCalendar(endYear, endMonth-1, endDay);
-        daysBooked.add(start);
-        while(start.equals(end)==false){
-            int i=1;
-            GregorianCalendar targetDay = new GregorianCalendar(startYear, startMonth, startDay+i);
-            start=targetDay;
-            daysBooked.add(start);
-        }
-        newBooking.setDayBooked(daysBooked);
+        newBooking.setDayBooked(start);
+        newBooking.setDuration(duration);
         em.persist(newBooking);
         hotelOperations.queueBooking(newBooking);
         
     }
     @Override
     public void actuallyBookTheRoom(RoomEntity roomToBook, List<GregorianCalendar> daysNeeded){
-        for(GregorianCalendar g : daysNeeded){
-            dayTracker bookedDay=new dayTracker(g);
-            roomToBook.getDayBooked().add(bookedDay);
+        for(GregorianCalendar j: daysNeeded){
+            roomToBook.getDayBooked().add(j);
         }
-        em.persist(roomToBook);
+        em.merge(roomToBook);
         em.flush();
+    }
+    
+    @Override
+    public void doIt(){
+        try {
+            hotelOperations.generateReport();
+        } catch (RoomTypeNotFoundException ex) {
+            Logger.getLogger(hotelReservations.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void persist(Object object) {

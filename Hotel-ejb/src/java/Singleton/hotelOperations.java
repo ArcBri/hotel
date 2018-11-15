@@ -8,9 +8,10 @@ package Singleton;
 import Entity.BookingOrder;
 import Entity.RoomEntity;
 import Entity.RoomTypeEntity;
-import Entity.dayTracker;
 import Stateful.hotelReservationsLocal;
 import Stateless.RoomTypeBeanLocal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Queue;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import util.RoomTypeNotFoundException;
 
 /**
@@ -25,6 +27,7 @@ import util.RoomTypeNotFoundException;
  * @author Joshua
  */
 @Singleton
+@Startup
 public class hotelOperations implements hotelOperationsLocal {
 
     @EJB
@@ -33,8 +36,10 @@ public class hotelOperations implements hotelOperationsLocal {
     private RoomTypeBeanLocal roomTypeBean;
 
 
+
     LinkedList<BookingOrder> roomsneeded=new LinkedList<BookingOrder>();
-    Queue<Integer> successfulBookings =new LinkedList<Integer>();    // Add business logic below. (Right-click in editor and choose
+    Queue<Integer> successfulBookings =new LinkedList<Integer>(); 
+        // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
     @Schedule(hour="2")
@@ -43,23 +48,35 @@ public class hotelOperations implements hotelOperationsLocal {
         for(int i=0; i<size; i++){
             BookingOrder currentNeeded = roomsneeded.get(i);
             String typeNeeded =currentNeeded.getTypeName();
-            List<GregorianCalendar> dayNeeded =currentNeeded.getDayBooked();
-            GregorianCalendar lastDay=dayNeeded.get(dayNeeded.size()-1);
+            GregorianCalendar dayNeeded =currentNeeded.getDayBooked();
+            int durationofstay = currentNeeded.getDuration();
+            List<GregorianCalendar> daysRoomBooked = new ArrayList<>();
             RoomTypeEntity needed=roomTypeBean.getRoomTypeByName(typeNeeded);
             List<RoomEntity> room = needed.getRooms();
-            for(RoomEntity j:room){
-                List<dayTracker> daysBooked = j.getDayBooked();
-                for(dayTracker k: daysBooked){
-                    for(GregorianCalendar l : dayNeeded){
-                        if(k.getDay().equals(l)){
+            for(RoomEntity j:room){//looking through each room
+                List<GregorianCalendar> daysBooked = j.getDayBooked();
+                if(daysBooked!=null){
+                for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
+                    for(int day=0; day<durationofstay; day++){//checking the order's required rooms
+                        dayNeeded.add(Calendar.DAY_OF_MONTH, day);
+                        if(k.equals(dayNeeded)){
                         break;
-                    }else if (k.getDay().equals(l)==false&&l.equals(lastDay)){
-                        hotelReservations.actuallyBookTheRoom(j, dayNeeded);
+                    }else if (day==durationofstay-1){
+                        daysRoomBooked.add(dayNeeded);
+                        hotelReservations.actuallyBookTheRoom(j, daysRoomBooked);
                         successfulBookings.add(i);
                         break;
+                    }else{
+                        daysRoomBooked.add(dayNeeded);
                     }
                     }
                     
+                }
+                }else{
+                    List<GregorianCalendar> daysss = new ArrayList<>();
+                    j.setDayBooked(daysss);
+                    hotelReservations.actuallyBookTheRoom(j, daysRoomBooked);
+                    successfulBookings.add(i);
                 }
             }
             
