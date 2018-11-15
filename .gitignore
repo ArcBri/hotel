@@ -1,3 +1,8 @@
 /HotelLibrary/build/
 /HotelManagementClient/nbproject/private/private.xml
 /Hotel-Ejb/nbproject/private/private.xml
+/HotelReservationClient/build/
+/HotelReservationClient/dist/
+/HotelLibrary/dist/
+/TestGuestSite/dist/
+/TestGuestSite/build/
