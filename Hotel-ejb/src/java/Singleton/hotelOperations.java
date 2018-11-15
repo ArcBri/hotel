@@ -36,6 +36,7 @@ public class hotelOperations implements hotelOperationsLocal {
     LinkedList<BookingOrder> roomsneeded=new LinkedList<BookingOrder>();
     Queue<Integer> successfulBookings =new LinkedList<Integer>();    // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @Override
     @Schedule(hour="2")
     public void generateReport() throws RoomTypeNotFoundException{
         int size=roomsneeded.size();
@@ -63,7 +64,7 @@ public class hotelOperations implements hotelOperationsLocal {
             }
             
         }
-        deleteSuccessfulFromQueue();
+        deleteSuccessfulFromQueue();//after this, anything remaining in roomsneeded means not enough space for that day
     }
 
      void deleteSuccessfulFromQueue() {

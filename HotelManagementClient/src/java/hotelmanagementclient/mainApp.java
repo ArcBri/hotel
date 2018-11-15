@@ -9,6 +9,7 @@ import Entity.EmployeeEntity;
 import Entity.RoomEntity;
 import Entity.RoomRateEntity;
 import Entity.RoomTypeEntity;
+import Stateful.hotelReservationsRemote;
 import Stateless.EmployeeBeanRemote;
 import Stateless.RoomBeanRemote;
 import Stateless.RoomRateBeanRemote;
@@ -44,6 +45,7 @@ class mainApp {
     private final RoomTypeBeanRemote roomtypebean = lookupRoomTypeBeanRemote();
     private final RoomBeanRemote roombean = lookupRoomBeanRemote();
     private final RoomRateBeanRemote roomratebean = lookupRoomRateBeanRemote();
+    private final hotelReservationsRemote hotelReserve = lookuphotelReservationsRemote();
 
     public mainApp() {
     }
@@ -70,6 +72,7 @@ class mainApp {
                 System.out.println("4) View Room Operations");
                 System.out.println("5) View Room Rate Operations");
                 System.out.println("6) View Room Allocation Exception Report"); //to add
+                System.out.println("7) Book a room");
                 System.out.println("0) Log Out");
                 int choice = sc.nextInt();
                 switch (choice) {
@@ -152,6 +155,9 @@ class mainApp {
                                 deleteRoomRate();
                                 break;
                         }
+                        break;
+                    case 7:
+                        bookRoom();
                         break;
                     case 0:
                         state = false;
@@ -555,6 +561,33 @@ class mainApp {
             throw new RuntimeException(ne);
         }
     }
+
+    private void bookRoom() {
+        System.out.println("Enter room type desired");
+        sc.nextLine();
+        String roomType=sc.nextLine();
+        System.out.println("Enter check in date in this order: Year, Month, Day");
+        int startYear=sc.nextInt();
+        int startMonth=sc.nextInt();
+        int startDay=sc.nextInt();
+        System.out.println("Enter check out date in this order : Year, Month, Day");
+        int endYear =sc.nextInt();
+        int endMonth=sc.nextInt();
+        int endDay = sc.nextInt();
+        hotelReserve.bookARoomEmployee(loggedInEmployee, roomType, startYear, startMonth, startDay, endYear, endMonth, endDay);
+        
+    }
+
+    private hotelReservationsRemote lookuphotelReservationsRemote() {
+        try {
+            Context c = new InitialContext();
+            return (hotelReservationsRemote) c.lookup("java:comp/env/hotelReservations");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
     
     
 }

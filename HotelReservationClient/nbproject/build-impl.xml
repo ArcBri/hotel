@@ -19,7 +19,7 @@
         - cleanup
 
         -->
-<project xmlns:carproject="http://www.netbeans.org/ns/car-project/1" basedir=".." default="default" name="TestGuestSite-impl">
+<project xmlns:carproject="http://www.netbeans.org/ns/car-project/1" basedir=".." default="default" name="HotelReservationClient-impl">
     <import file="ant-deploy.xml"/>
     <fail message="Please build using Ant 1.7.1 or higher.">
         <condition>
@@ -400,7 +400,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     </fileset>
                 </union>
                 <taskdef classname="org.testng.TestNGAntTask" classpath="${run.test.classpath}" name="testng"/>
-                <testng classfilesetref="test.set" failureProperty="tests.failed" listeners="org.testng.reporters.VerboseReporter" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="TestGuestSite" testname="TestNG tests" workingDir="${work.dir}">
+                <testng classfilesetref="test.set" failureProperty="tests.failed" listeners="org.testng.reporters.VerboseReporter" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="HotelReservationClient" testname="TestNG tests" workingDir="${work.dir}">
                     <xmlfileset dir="${build.test.classes.dir}" includes="@{testincludes}"/>
                     <propertyset>
                         <propertyref prefix="test-sys-prop."/>
@@ -546,7 +546,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                 <condition else="-testclass @{testClass}" property="test.class.or.method" value="-methods @{testClass}.@{testMethod}">
                     <isset property="test.method"/>
                 </condition>
-                <condition else="-suitename TestGuestSite -testname @{testClass} ${test.class.or.method}" property="testng.cmd.args" value="@{testClass}">
+                <condition else="-suitename HotelReservationClient -testname @{testClass} ${test.class.or.method}" property="testng.cmd.args" value="@{testClass}">
                     <matches pattern=".*\.xml" string="@{testClass}"/>
                 </condition>
                 <delete dir="${build.test.results.dir}" quiet="true"/>
@@ -758,7 +758,7 @@ exists or setup the property manually. For example like this:
             -->
     <target name="-check-main-class">
         <fail>
-                    Main class must be set. Go to TestGuestSite project properties -&gt; Run and set the main class there.
+                    Main class must be set. Go to HotelReservationClient project properties -&gt; Run and set the main class there.
                     <condition>
                 <not>
                     <or>
@@ -948,17 +948,17 @@ exists or setup the property manually. For example like this:
         </macrodef>
     </target>
     <target if="j2ee.appclient.mainclass.args" name="-as-retrieve-option-workaround" unless="j2ee.clientName">
-        <property name="client.jar" value="${dist.dir}/TestGuestSiteClient.jar"/>
+        <property name="client.jar" value="${dist.dir}/HotelReservationClientClient.jar"/>
         <sleep seconds="3"/>
-        <copy failonerror="false" file="${wa.copy.client.jar.from}/TestGuestSite/TestGuestSiteClient.jar" todir="${dist.dir}"/>
+        <copy failonerror="false" file="${wa.copy.client.jar.from}/HotelReservationClient/HotelReservationClientClient.jar" todir="${dist.dir}"/>
         <copy failonerror="false" flatten="true" todir="${dist.dir}/">
-            <fileset dir="${wa.copy.client.jar.from}/TestGuestSite" includes="**/TestGuestSiteClient.jar"/>
+            <fileset dir="${wa.copy.client.jar.from}/HotelReservationClient" includes="**/HotelReservationClientClient.jar"/>
         </copy>
-        <copy flatten="true" todir="${dist.dir}/TestGuestSiteClient">
-            <fileset dir="${wa.copy.client.jar.from}/TestGuestSite" includes="**/*.*ar"/>
+        <copy flatten="true" todir="${dist.dir}/HotelReservationClientClient">
+            <fileset dir="${wa.copy.client.jar.from}/HotelReservationClient" includes="**/*.*ar"/>
         </copy>
-        <copy failonerror="false" flatten="false" todir="${dist.dir}/TestGuestSiteClient">
-            <fileset dir="${dist.dir}/gfdeploy/TestGuestSite" includes="**/*.jar"/>
+        <copy failonerror="false" flatten="false" todir="${dist.dir}/HotelReservationClientClient">
+            <fileset dir="${dist.dir}/gfdeploy/HotelReservationClient" includes="**/*.jar"/>
         </copy>
     </target>
     <target name="pre-run-deploy">

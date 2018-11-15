@@ -7,6 +7,7 @@ package Singleton;
 
 import Entity.BookingOrder;
 import javax.ejb.Local;
+import util.RoomTypeNotFoundException;
 
 /**
  *
@@ -16,5 +17,7 @@ import javax.ejb.Local;
 public interface hotelOperationsLocal {
 
     public void queueBooking(BookingOrder a);
+
+    public void generateReport() throws RoomTypeNotFoundException;
     
 }
