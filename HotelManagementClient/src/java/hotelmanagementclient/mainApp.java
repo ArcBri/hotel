@@ -130,6 +130,9 @@ class mainApp {
                             case 4:
                                 deleteRoom();
                                 break;
+                            case 5:
+                                viewRoomBooked();
+                                break;
                         }
                         break;
                     case 5:
@@ -603,6 +606,15 @@ class mainApp {
         long durationInMillis=endtime-starttime;
         long durationInDays=durationInMillis/(1000*60*60*24);
         return Math.toIntExact(durationInDays);
+    }
+    
+    private void viewRoomBooked(){
+        List<RoomEntity> RoomList = roombean.viewAllRooms();
+        int count = 1;
+        for(RoomEntity r: RoomList){
+            System.out.println(count + ") Room "+ r.getFinalNumber() + "booked?" + r.getDayBooked());
+            count++;
+        }
     }
     
     

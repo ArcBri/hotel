@@ -11,6 +11,7 @@ import Entity.GuestEntity;
 import Entity.RoomEntity;
 import Singleton.hotelOperationsLocal;
 import Stateless.EmployeeBeanLocal;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -65,9 +66,11 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
     }
     @Override
     public void actuallyBookTheRoom(RoomEntity roomToBook, List<GregorianCalendar> daysNeeded){
+        List<GregorianCalendar> roombooklist = roomToBook.getDayBooked();
         for(GregorianCalendar j: daysNeeded){
-            roomToBook.getDayBooked().add(j);
+            roombooklist.add(j);
         }
+        roomToBook.setDayBooked(roombooklist);
         em.merge(roomToBook);
         em.flush();
     }
