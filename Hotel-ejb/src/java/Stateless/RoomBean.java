@@ -7,6 +7,8 @@ package Stateless;
 
 import Entity.RoomEntity;
 import Entity.RoomTypeEntity;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -60,6 +62,24 @@ public class RoomBean implements RoomBeanRemote, RoomBeanLocal {
         RoomEntity room = (RoomEntity) em.createQuery("SELECT rm FROM RoomEntity rm WHERE rm.finalNumber LIKE :roomfinalnumber").setParameter("roomfinalnumber", roomnumber).getSingleResult();
         em.remove(room);
         em.flush();
+    }
+    
+    @Override
+    public List<RoomEntity> searchRoom(GregorianCalendar dateStart, int duration) {
+        List<RoomEntity> candidates = em.createQuery("SELECT rm FROM RoomEntity rm").getResultList();
+        for(RoomEntity rm: candidates) {
+            List<GregorianCalendar> daysBooked = rm.getDayBooked();
+            for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
+                    for(int day=0; day<duration; day++){//checking the order's required rooms
+                        dateStart.add(Calendar.DAY_OF_MONTH, day);
+                        if(k.equals(dateStart)){
+                            candidates.remove(rm);
+                        break;
+                    }
+                    }
+            }
+        }
+        return(candidates);
     }
 
     // Add business logic below. (Right-click in editor and choose

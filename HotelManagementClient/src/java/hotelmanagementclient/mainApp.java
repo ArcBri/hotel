@@ -162,6 +162,7 @@ class mainApp {
                         break;
                     case 99:
                         hotelReserve.doIt();
+                        break;
                     case 0:
                         state = false;
                         System.out.println("End Application? Y/N");

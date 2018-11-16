@@ -6,6 +6,7 @@
 package Stateless;
 
 import Entity.RoomEntity;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -21,4 +22,5 @@ public interface RoomBeanRemote {
     public RoomEntity getRoomDetails(int roomnumber);
     public void updateRoomDetails(RoomEntity rm);
     public void deleteRoom(int roomnumber);
+    public List<RoomEntity> searchRoom(GregorianCalendar dateStart, int duration);
 }
