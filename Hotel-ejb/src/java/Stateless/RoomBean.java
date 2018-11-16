@@ -40,6 +40,7 @@ public class RoomBean implements RoomBeanRemote, RoomBeanLocal {
         return newRoomEntity.getRoomId();
     }
     
+    
     @Override
     public List<RoomEntity> viewAllRooms(){
         Query query = em.createQuery("SELECT r FROM RoomEntity r");

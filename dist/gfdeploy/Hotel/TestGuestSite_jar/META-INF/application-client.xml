@@ -6,4 +6,9 @@
     <ejb-ref-type>Session</ejb-ref-type>
     <remote>Stateless.GuestControllerRemote</remote>
   </ejb-ref>
+  <ejb-ref>
+    <ejb-ref-name>RoomBean</ejb-ref-name>
+    <ejb-ref-type>Session</ejb-ref-type>
+    <remote>Stateless.RoomBeanRemote</remote>
+  </ejb-ref>
 </application-client>

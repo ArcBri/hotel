@@ -64,10 +64,26 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
         
     }
     @Override
-    public void actuallyBookTheRoom(RoomEntity roomToBook, List<GregorianCalendar> daysNeeded){
+    public void actuallyBookTheRoom(Long roomId, List<GregorianCalendar> daysNeeded){
+        RoomEntity roomToBook = em.find(RoomEntity.class, roomId);
+        //List<GregorianCalendar> daysBooked=roomToBook.getDayBooked();
         for(GregorianCalendar j: daysNeeded){
+            //daysBooked.add(j);
             roomToBook.getDayBooked().add(j);
         }
+        //roomToBook.setDayBooked(daysBooked);
+        em.merge(roomToBook);
+        em.flush();
+    }
+    @Override
+        public void actuallyBookTheRoomRemote(Long roomId, List<GregorianCalendar> daysNeeded){
+        RoomEntity roomToBook = em.find(RoomEntity.class, roomId);
+        //List<GregorianCalendar> daysBooked=roomToBook.getDayBooked();
+        for(GregorianCalendar j: daysNeeded){
+            //daysBooked.add(j);
+            roomToBook.getDayBooked().add(j);
+        }
+        //roomToBook.setDayBooked(daysBooked);
         em.merge(roomToBook);
         em.flush();
     }

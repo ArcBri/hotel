@@ -51,35 +51,43 @@ public class hotelOperations implements hotelOperationsLocal {
             GregorianCalendar dayNeeded =currentNeeded.getDayBooked();
             int durationofstay = currentNeeded.getDuration();
             List<GregorianCalendar> daysRoomBooked = new ArrayList<>();
+            
+            for(int day=0; day<durationofstay; day++){
+                dayNeeded.add(GregorianCalendar.DAY_OF_MONTH, day);
+                daysRoomBooked.add(dayNeeded);
+            }
+            
             RoomTypeEntity needed=roomTypeBean.getRoomTypeByName(typeNeeded);
             List<RoomEntity> room = needed.getRooms();
             for(RoomEntity j:room){//looking through each room
-                List<GregorianCalendar> daysBooked = j.getDayBooked();
-                if(daysBooked!=null){
-                for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
+                if(j.getDayBooked().isEmpty()==false){
+                ArrayList<GregorianCalendar> daysBooked = j.getDayBooked();
+                int sizeOf = daysBooked.size();
+                if(sizeOf!=durationofstay){
+               /* for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
                     for(int day=0; day<durationofstay; day++){//checking the order's required rooms
                         dayNeeded.add(GregorianCalendar.DAY_OF_MONTH, day);
                         if(k.compareTo(dayNeeded)==0){
                         break;
-                    }else if (day==durationofstay-1){
+                    }else if (day==durationofstay-1){*/
                         daysRoomBooked.add(dayNeeded);
-                        hotelReservations.actuallyBookTheRoom(j, daysRoomBooked);
-                        successfulBookings.add(i);
+                        hotelReservations.actuallyBookTheRoom(j.getRoomId(), daysRoomBooked);
+                        successfulBookings.add(i); /*
                         break;
                     }else{
                         daysRoomBooked.add(dayNeeded);
                     }
                     }
                     
-                }
+                }*/
                 }else{
-                    List<GregorianCalendar> daysss = new ArrayList<>();
-                    j.setDayBooked(daysss);
-                    hotelReservations.actuallyBookTheRoom(j, daysRoomBooked);
+                    j.setDayBooked(new ArrayList<>());
+                    hotelReservations.actuallyBookTheRoom(j.getRoomId(), daysRoomBooked);
                     successfulBookings.add(i);
                 }
             }
             
+        }
         }
         deleteSuccessfulFromQueue();//after this, anything remaining in roomsneeded means not enough space for that day
     }

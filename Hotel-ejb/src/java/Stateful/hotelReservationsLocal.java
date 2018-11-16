@@ -17,6 +17,7 @@ import javax.ejb.Local;
 @Local
 public interface hotelReservationsLocal {
 
-    public void actuallyBookTheRoom(RoomEntity roomToBook, List<GregorianCalendar> daysNeeded);
+
+    public void actuallyBookTheRoom(Long roomId, List<GregorianCalendar> daysNeeded);
     
 }

@@ -37,8 +37,8 @@ public class RoomEntity implements Serializable {
     private int finalNumber;
     @Column
     private boolean roomAvailable;
-    @Column(nullable=true)
-    private List<GregorianCalendar> dayBooked;
+    @Column
+    private ArrayList<GregorianCalendar> dayBooked;
     @ManyToOne
     private RoomTypeEntity roomtype;
 
@@ -51,7 +51,14 @@ public class RoomEntity implements Serializable {
         this.roomNumber = roomNumber;
         this.roomAvailable = false;
         this.finalNumber =  floorNumber * 100 + roomNumber;
-        dayBooked=new ArrayList<GregorianCalendar>(0);
+        dayBooked=new ArrayList<>();
+    }
+
+    public RoomEntity(String roomType, int floorNumber, int roomNumber, ArrayList<GregorianCalendar> dayBooked) {
+        this.roomType = roomType;
+        this.floorNumber = floorNumber;
+        this.roomNumber = roomNumber;
+        this.dayBooked = dayBooked;
     }
     
     
@@ -132,11 +139,11 @@ public class RoomEntity implements Serializable {
         return "Entity.RoomEntity[ id=" + roomId + " ]";
     }
 
-    public List<GregorianCalendar> getDayBooked() {
+    public ArrayList<GregorianCalendar> getDayBooked() {
         return dayBooked;
     }
 
-    public void setDayBooked(List<GregorianCalendar> dayBooked) {
+    public void setDayBooked(ArrayList<GregorianCalendar> dayBooked) {
         this.dayBooked = dayBooked;
     }
 

@@ -575,12 +575,12 @@ class mainApp {
         int startYear=sc.nextInt();
         int startMonth=sc.nextInt();
         int startDay=sc.nextInt();
-        GregorianCalendar d1 = new GregorianCalendar(startYear, startMonth, startDay);
+        GregorianCalendar d1 = new GregorianCalendar(startYear, startMonth-1, startDay);
         System.out.println("Enter check out date in this order: Year, Month, Day");
         int endYear=sc.nextInt();
         int endMonth=sc.nextInt();
         int endDay=sc.nextInt();
-        GregorianCalendar d2 = new GregorianCalendar(endYear, endMonth, endDay);
+        GregorianCalendar d2 = new GregorianCalendar(endYear, endMonth-1, endDay);
         int duration =dayDiff(d1,d2);
         sc.nextLine();
         hotelReserve.bookARoomEmployee(loggedInEmployee, roomType, startYear, startMonth, startDay, duration);
