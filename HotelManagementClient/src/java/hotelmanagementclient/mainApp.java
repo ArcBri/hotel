@@ -16,6 +16,7 @@ import Stateless.RoomRateBeanRemote;
 import Stateless.RoomTypeBeanRemote;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
@@ -574,8 +575,13 @@ class mainApp {
         int startYear=sc.nextInt();
         int startMonth=sc.nextInt();
         int startDay=sc.nextInt();
-        System.out.println("Enter duration of stay");
-        int duration =sc.nextInt();
+        GregorianCalendar d1 = new GregorianCalendar(startYear, startMonth, startDay);
+        System.out.println("Enter check out date in this order: Year, Month, Day");
+        int endYear=sc.nextInt();
+        int endMonth=sc.nextInt();
+        int endDay=sc.nextInt();
+        GregorianCalendar d2 = new GregorianCalendar(endYear, endMonth, endDay);
+        int duration =dayDiff(d1,d2);
         sc.nextLine();
         hotelReserve.bookARoomEmployee(loggedInEmployee, roomType, startYear, startMonth, startDay, duration);
         
@@ -589,6 +595,14 @@ class mainApp {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
+    }
+
+    private int dayDiff(GregorianCalendar d1, GregorianCalendar d2) {
+        long starttime=d1.getTimeInMillis();
+        long endtime =d2.getTimeInMillis();
+        long durationInMillis=endtime-starttime;
+        long durationInDays=durationInMillis/(1000*60*60*24);
+        return Math.toIntExact(durationInDays);
     }
     
     

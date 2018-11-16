@@ -58,8 +58,8 @@ public class hotelOperations implements hotelOperationsLocal {
                 if(daysBooked!=null){
                 for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
                     for(int day=0; day<durationofstay; day++){//checking the order's required rooms
-                        dayNeeded.add(Calendar.DAY_OF_MONTH, day);
-                        if(k.equals(dayNeeded)){
+                        dayNeeded.add(GregorianCalendar.DAY_OF_MONTH, day);
+                        if(k.compareTo(dayNeeded)==0){
                         break;
                     }else if (day==durationofstay-1){
                         daysRoomBooked.add(dayNeeded);

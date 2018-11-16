@@ -71,8 +71,8 @@ public class RoomBean implements RoomBeanRemote, RoomBeanLocal {
             List<GregorianCalendar> daysBooked = rm.getDayBooked();
             for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
                     for(int day=0; day<duration; day++){//checking the order's required rooms
-                        dateStart.add(Calendar.DAY_OF_MONTH, day);
-                        if(k.equals(dateStart)){
+                        dateStart.add(GregorianCalendar.DAY_OF_MONTH, day);
+                        if(k.compareTo(dateStart)==0){
                             candidates.remove(rm);
                         break;
                     }
