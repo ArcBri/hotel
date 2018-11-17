@@ -78,9 +78,10 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
     public void actuallyBookTheRoom(Long roomId, List<GregorianCalendar> daysNeeded){
         RoomEntity roomToBook = em.find(RoomEntity.class, roomId);
         //List<GregorianCalendar> daysBooked=roomToBook.getDayBooked();
-        for(GregorianCalendar j: daysNeeded){
+        for(int day=0; day<daysNeeded.size();day++){
             //daysBooked.add(j);
-            roomToBook.getDayBooked().add(j);
+            GregorianCalendar toAdd=daysNeeded.get(day);
+            roomToBook.getDayBooked().add(toAdd);
         }
         //roomToBook.setDayBooked(daysBooked);
         em.merge(roomToBook);
