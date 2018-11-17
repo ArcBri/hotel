@@ -49,7 +49,6 @@ public class hotelOperations implements hotelOperationsLocal {
             BookingOrder currentNeeded = roomsneeded.get(i);
             String typeNeeded =currentNeeded.getTypeName();
             GregorianCalendar dayNeeded =currentNeeded.getDayBooked();
-            GregorianCalendar daysNeeded=currentNeeded.getDayBooked();
             int durationofstay = currentNeeded.getDuration();
             List<GregorianCalendar> daysRoomBooked = new ArrayList<>();
             
@@ -60,30 +59,28 @@ public class hotelOperations implements hotelOperationsLocal {
             
             RoomTypeEntity needed=roomTypeBean.getRoomTypeByName(typeNeeded);
             List<RoomEntity> room = needed.getRooms();
-            for(int k=0; k<room.size();k++){//looking through each room
-                RoomEntity j = room.get(k);
+            for(RoomEntity j:room){//looking through each room
                 if(j.getDayBooked().isEmpty()==false){
-                 ArrayList<GregorianCalendar> daysBooked = j.getDayBooked();
-                 int sizeOf = daysBooked.size();
-               /* if(sizeOf!=durationofstay){*/
-                 for(int m=0; m<sizeOf;m++){//looking at the room's days 1 by 1
-                     GregorianCalendar dayBooked=daysBooked.get(m);
-                     for(int day=0; day<durationofstay; day++){//checking the order's required rooms
-                        daysNeeded.add(GregorianCalendar.DAY_OF_MONTH, day);
-                        if(dayBooked.compareTo(daysNeeded)==0){
+                ArrayList<GregorianCalendar> daysBooked = j.getDayBooked();
+                int sizeOf = daysBooked.size();
+                if(sizeOf!=durationofstay){
+               /* for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
+                    for(int day=0; day<durationofstay; day++){//checking the order's required rooms
+                        dayNeeded.add(GregorianCalendar.DAY_OF_MONTH, day);
+                        if(k.compareTo(dayNeeded)==0){
                         break;
-                        }else if (dayBooked.compareTo(daysRoomBooked.get(daysRoomBooked.size()-1))==0){
-                        daysRoomBooked.add(daysNeeded);
+                    }else if (day==durationofstay-1){*/
+                        daysRoomBooked.add(dayNeeded);
                         hotelReservations.actuallyBookTheRoom(j.getRoomId(), daysRoomBooked);
-                        successfulBookings.add(i); 
+                        successfulBookings.add(i); /*
                         break;
                     }else{
-                        daysRoomBooked.add(daysNeeded);
+                        daysRoomBooked.add(dayNeeded);
                     }
                     }
                     
-                }
-                }else if(j.getDayBooked().isEmpty()||j.getDayBooked()==null){
+                }*/
+                }else{
                     j.setDayBooked(new ArrayList<>());
                     hotelReservations.actuallyBookTheRoom(j.getRoomId(), daysRoomBooked);
                     successfulBookings.add(i);
@@ -91,10 +88,9 @@ public class hotelOperations implements hotelOperationsLocal {
             }
             
         }
-        
+        }
         deleteSuccessfulFromQueue();//after this, anything remaining in roomsneeded means not enough space for that day
     }
-    
 
      void deleteSuccessfulFromQueue() {
         while(successfulBookings.isEmpty()==false){

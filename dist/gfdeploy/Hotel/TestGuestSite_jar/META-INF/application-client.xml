@@ -11,9 +11,4 @@
     <ejb-ref-type>Session</ejb-ref-type>
     <remote>Stateless.RoomBeanRemote</remote>
   </ejb-ref>
-  <ejb-ref>
-    <ejb-ref-name>RoomRateBean</ejb-ref-name>
-    <ejb-ref-type>Session</ejb-ref-type>
-    <remote>Stateless.RoomRateBeanRemote</remote>
-  </ejb-ref>
 </application-client>
