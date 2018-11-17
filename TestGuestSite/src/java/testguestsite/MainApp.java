@@ -7,8 +7,11 @@ package testguestsite;
 
 import Entity.GuestEntity;
 import Entity.RoomEntity;
+import Entity.RoomRateEntity;
 import Stateless.GuestControllerRemote;
 import Stateless.RoomBeanRemote;
+import Stateless.RoomRateBeanRemote;
+import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
@@ -31,6 +34,7 @@ class MainApp {
     private long guestId;
     private final GuestControllerRemote guestControl= lookupGuestControllerRemote();
     private final RoomBeanRemote roombean = lookupRoomBeanRemote();
+    private final RoomRateBeanRemote roomratebean = lookupRoomRateBeanRemote();
 
     public MainApp() {
     }
@@ -111,19 +115,36 @@ class MainApp {
         int inYear = sc.nextInt();
         int inMonth = sc.nextInt();
         int inDay = sc.nextInt();
+        inMonth--;
         GregorianCalendar inDate = new GregorianCalendar(inYear, inMonth, inDay);
-        /*System.out.println("Enter check-out date (YYYY MM DD): ");
+        System.out.println("Enter check-out date (YYYY MM DD): ");
         int outYear = sc.nextInt();
         int outMonth = sc.nextInt();
         int outDay = sc.nextInt();
-        GregorianCalendar outDate = new GregorianCalendar(outYear, outMonth, outDay);*/
-        System.out.println("Enter duration of stay: ");
-        int duration = sc.nextInt();
+        outMonth--;
+        GregorianCalendar outDate = new GregorianCalendar(outYear, outMonth, outDay);
+        int duration = dayDiff(inDate, outDate);
         List<RoomEntity> candidates = roombean.searchRoom(inDate, duration);
         for (RoomEntity rm: candidates) {
-            System.out.println("Room " + rm.getFinalNumber());
+            BigDecimal onlinerate = roomratebean.getOnlineRate(rm.getRoomType(), inDate, duration);
+            System.out.println("Room " + rm.getFinalNumber() + ": $" + onlinerate);
         }
+        /*boolean booking = true;
+        while (booking == true) {
+            bookroom();
+            System.out.println("Book a Room? (Y/N)");
+            String bookchoice = sc.next();
+            if (bookchoice == "N") {
+                System.out.println("Booking(s) Saved");
+                booking = false;
+            }
+        }*/
         
+    }
+    
+    private void bookRoom() {
+        System.out.println("Enter the room number of the room to be booked: ");
+        int roomnumber = sc.nextInt();
     }
 
     private GuestControllerRemote lookupGuestControllerRemote() {
@@ -145,5 +166,24 @@ class MainApp {
             throw new RuntimeException(ne);
         }
     }
+
+    private RoomRateBeanRemote lookupRoomRateBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (RoomRateBeanRemote) c.lookup("java:comp/env/RoomRateBean");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
     
+    private int dayDiff(GregorianCalendar d1, GregorianCalendar d2) {
+        long starttime=d1.getTimeInMillis();
+        long endtime =d2.getTimeInMillis();
+        long durationInMillis=endtime-starttime;
+        long durationInDays=durationInMillis/(1000*60*60*24);
+        return Math.toIntExact(durationInDays);
+    }
+    
+   
 }
