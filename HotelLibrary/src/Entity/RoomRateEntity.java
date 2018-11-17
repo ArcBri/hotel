@@ -6,6 +6,8 @@
 package Entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.persistence.Column;
@@ -33,11 +35,13 @@ public class RoomRateEntity implements Serializable {
     @Column(length = 32, nullable = false)
     private String roomType;
     @Column(length = 32, nullable = false)
-    private int ratePerNight;
+    private BigDecimal ratePerNight;
     @Column
     private GregorianCalendar validityStart = null;
     @Column
     private GregorianCalendar validityEnd = null;
+    @Column 
+    private ArrayList <GregorianCalendar> rateperiod; 
     @ManyToOne
     private RoomTypeEntity roomstype;
     private Boolean validity = false;
@@ -45,7 +49,7 @@ public class RoomRateEntity implements Serializable {
     public RoomRateEntity() {
     }
 
-    public RoomRateEntity(String name, String roomType, String rateType, int ratePerNight) {
+    public RoomRateEntity(String name, String roomType, String rateType, BigDecimal ratePerNight) {
         this.name = name;
         this.roomType = roomType;
         this.rateType = rateType;
@@ -54,13 +58,13 @@ public class RoomRateEntity implements Serializable {
         this.validityEnd = new GregorianCalendar(2100, 11, 4);
     }
 
-    public RoomRateEntity(String name, String roomType, String rateType, int ratePerNight, GregorianCalendar validityPeriod) {
+    /*public RoomRateEntity(String name, String roomType, String rateType, BigDecimal ratePerNight, GregorianCalendar validityPeriod) { //should be unused
         this.name = name;
         this.roomType = roomType;
         this.rateType = rateType;
         this.ratePerNight = ratePerNight;
         this.validityStart = validityPeriod;
-    }
+    }*/
     
     public Long getRoomRateId() {
         return id;
@@ -119,11 +123,11 @@ public class RoomRateEntity implements Serializable {
         this.rateType = rateType;
     }
 
-    public int getRatePerNight() {
+    public BigDecimal getRatePerNight() {
         return ratePerNight;
     }
 
-    public void setRatePerNight(int ratePerNight) {
+    public void setRatePerNight(BigDecimal ratePerNight) {
         this.ratePerNight = ratePerNight;
     }
 
@@ -157,6 +161,14 @@ public class RoomRateEntity implements Serializable {
 
     public void setValidity(Boolean validity) {
         this.validity = validity;
+    }
+
+    public ArrayList <GregorianCalendar> getRateperiod() {
+        return rateperiod;
+    }
+
+    public void setRateperiod(ArrayList <GregorianCalendar> rateperiod) {
+        this.rateperiod = rateperiod;
     }
     
 }

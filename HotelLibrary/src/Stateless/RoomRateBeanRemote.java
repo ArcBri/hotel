@@ -6,6 +6,8 @@
 package Stateless;
 
 import Entity.RoomRateEntity;
+import java.math.BigDecimal;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -20,4 +22,6 @@ public interface RoomRateBeanRemote {
     public RoomRateEntity getDetails(String name);
     public void updateRoomRateDetails(RoomRateEntity rr);
     public void deleteRoomRate(String name);
+    public RoomRateEntity getWalkInRate(String roomtype);
+    public BigDecimal getOnlineRate(String roomType, GregorianCalendar startDate, int duration);
 }

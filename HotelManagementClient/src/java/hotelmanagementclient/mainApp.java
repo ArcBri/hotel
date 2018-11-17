@@ -14,6 +14,8 @@ import Stateless.EmployeeBeanRemote;
 import Stateless.RoomBeanRemote;
 import Stateless.RoomRateBeanRemote;
 import Stateless.RoomTypeBeanRemote;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -379,7 +381,7 @@ class mainApp {
         System.out.println("Enter the type of rate: (Published Rate, Normal Rate, Peak Rate, Promotion Rate)");
         String o = sc.nextLine();
         System.out.println("Enter the rate per night:");
-        int y = sc.nextInt();
+        BigDecimal y = sc.nextBigDecimal();
         RoomRateEntity roomrate = new RoomRateEntity(j, k, o, y);
         System.out.println("Enter the validity period? (Y/N)");
         String option = sc.next();
@@ -391,14 +393,23 @@ class mainApp {
             startmonth--;
             int startday = sc.nextInt();
             GregorianCalendar startdate = new GregorianCalendar(startyear, startmonth, startday);
+            roomrate.setValidityStart(startdate);
             System.out.println("Enter the Ending Date (YYYY MM DD)");
             int endyear = sc.nextInt();
             int endmonth = sc.nextInt();
             endmonth--;
             int endday = sc.nextInt();
             GregorianCalendar enddate = new GregorianCalendar(endyear, endmonth, endday);
-            roomrate.setValidityStart(startdate);
             roomrate.setValidityEnd(enddate);
+            ArrayList <GregorianCalendar> rateperiod = new ArrayList<GregorianCalendar>();
+            GregorianCalendar day = startdate;
+            while (day.equals(enddate) == false) {
+                rateperiod.add(day);
+                day.add(GregorianCalendar.DAY_OF_WEEK, 1);
+            }
+
+            
+            roomrate.setRateperiod(rateperiod);
         }
 
         roomratebean.createRoomRate(roomrate);
@@ -473,13 +484,13 @@ class mainApp {
                         rate.setRoomType(newtype);
                         break;
                     case 3:
-                        System.out.println("Enter new Rate Type: ");
+                        System.out.println("Enter new Rate Type: (Published Rate, Normal Rate, Peak Rate, Promotion Rate)");
                         String newratetype = sc.nextLine();
                         rate.setRateType(newratetype);
                         break;
                     case 4:
                         System.out.println("Enter new Rate Per Night: ");
-                        int newrpn = sc.nextInt();
+                        BigDecimal newrpn = sc.nextBigDecimal();
                         sc.nextLine();
                         rate.setRatePerNight(newrpn);
                         break;
@@ -612,7 +623,7 @@ class mainApp {
         List<RoomEntity> RoomList = roombean.viewAllRooms();
         int count = 1;
         for(RoomEntity r: RoomList){
-            System.out.println(count + ") Room "+ r.getFinalNumber() + "booked?" + r.getDayBooked());
+            System.out.println(count + ") Room "+ r.getFinalNumber() + "booked?" + r.getDayBooked().toString());
             count++;
         }
     }

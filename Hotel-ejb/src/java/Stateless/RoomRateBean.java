@@ -6,10 +6,14 @@
 package Stateless;
 
 import Entity.RoomRateEntity;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -53,6 +57,77 @@ public class RoomRateBean implements RoomRateBeanRemote, RoomRateBeanLocal {
         RoomRateEntity roomrate = (RoomRateEntity) em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name LIKE :ratename").setParameter("ratename", name).getSingleResult();
         em.remove(roomrate);
         em.flush();
+    }
+    
+    @Override
+    public RoomRateEntity getWalkInRate(String roomType) {
+        RoomRateEntity walkrate = (RoomRateEntity) em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.rateType = \\\"Published Rate\\\" AND rr.roomType LIKE :typename").setParameter("typename", roomType).getSingleResult();
+        return walkrate;
+    }
+    
+    @Override
+    public BigDecimal getOnlineRate(String roomType, GregorianCalendar startDate, int duration) {
+        Query findnormal = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.roomType LIKE :roomtype AND rr.rateType LIKE :ratename");
+        findnormal.setParameter("roomtype", roomType);
+        findnormal.setParameter("ratename", "Normal Rate");
+        Query findpromo = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.roomType LIKE :roomtype AND rr.rateType LIKE :ratename");
+        findpromo.setParameter("roomtype", roomType);
+        findpromo.setParameter("ratename", "Promotion Rate");
+        Query findpeak = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.roomType LIKE :roomtype AND rr.rateType LIKE :ratename");
+        findpeak.setParameter("roomtype", roomType);
+        findpeak.setParameter("ratename", "Peak Rate");
+        
+        RoomRateEntity normalrate = (RoomRateEntity) findnormal.getSingleResult();
+        List <RoomRateEntity> peakrate = findpeak.getResultList();
+        List <RoomRateEntity> promorate = findpromo.getResultList();
+        BigDecimal overallrate = BigDecimal.ZERO;
+        GregorianCalendar date = startDate;
+        Boolean found;
+        
+        for (int i = 0; i < duration; i++) {
+            found = false;
+            for (RoomRateEntity pr : promorate) {
+                ArrayList <GregorianCalendar> promodates = pr.getRateperiod();
+                for (GregorianCalendar prgc : promodates) {
+                    if (prgc.equals(date)) {
+                        overallrate = overallrate.add(pr.getRatePerNight());
+                        date.add(GregorianCalendar.DAY_OF_WEEK, 1);
+                        found = true;
+                        //break;
+                    }
+                    if (found == true) {
+                        break;
+                    }
+                }
+                if (found == true) {
+                    break;
+                }
+            }
+            for (RoomRateEntity pe : peakrate) {
+                ArrayList <GregorianCalendar> peakdates = pe.getRateperiod();
+                for (GregorianCalendar pegc : peakdates) {
+                    if (pegc.equals(date)) {
+                        overallrate = overallrate.add(pe.getRatePerNight());
+                        date.add(GregorianCalendar.DAY_OF_WEEK, 1);
+                        found = true;
+                        //break;
+                    }
+                    if (found == true) {
+                        break;
+                    }
+                }
+                if (found == true) {
+                    break;
+                }
+            }
+            if (found == false) {
+                overallrate = overallrate.add(normalrate.getRatePerNight());
+                date.add(GregorianCalendar.DAY_OF_WEEK, 1);
+            }
+        }
+
+        return overallrate;
+        
     }
 
     // Add business logic below. (Right-click in editor and choose
