@@ -5,6 +5,7 @@
  */
 package Stateful;
 
+import Entity.PartnerEntity;
 import Entity.RoomEntity;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -19,5 +20,7 @@ public interface hotelReservationsLocal {
 
 
     public void actuallyBookTheRoom(Long roomId, List<GregorianCalendar> daysNeeded);
+
+    public void bookARoomPartner(PartnerEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration);
     
 }

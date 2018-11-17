@@ -6,11 +6,14 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -25,6 +28,10 @@ public class PartnerEntity implements Serializable {
     private Long id;
     @Column(length = 32, nullable = false, unique=true)
     private String username;
+    @Column(length = 32, nullable = false)
+    private String password;
+    @OneToMany(mappedBy="partner", cascade={CascadeType.MERGE,CascadeType.PERSIST})
+    private List<BookingOrder> bookingOrder;
 
     public Long getId() {
         return id;
@@ -33,8 +40,9 @@ public class PartnerEntity implements Serializable {
     public PartnerEntity() {
     }
 
-    public PartnerEntity(String username) {
+    public PartnerEntity(String username, String password) {
         this.username = username;
+        
     }
 
     public void setId(Long id) {
@@ -72,6 +80,22 @@ public class PartnerEntity implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<BookingOrder> getBookingOrder() {
+        return bookingOrder;
+    }
+
+    public void setBookingOrder(List<BookingOrder> bookingOrder) {
+        this.bookingOrder = bookingOrder;
     }
     
 }

@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author Joshua
  */
 @Remote
-public interface PartnerTransactionControllerRemote {
+public interface PartnerControllerRemote {
     
 }

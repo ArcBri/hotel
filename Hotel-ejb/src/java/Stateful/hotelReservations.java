@@ -8,6 +8,7 @@ package Stateful;
 import Entity.BookingOrder;
 import Entity.EmployeeEntity;
 import Entity.GuestEntity;
+import Entity.PartnerEntity;
 import Entity.RoomEntity;
 import Singleton.hotelOperationsLocal;
 import Stateless.EmployeeBeanLocal;
@@ -55,6 +56,16 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
     }
     @Override
         public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration){
+        BookingOrder newBooking = new BookingOrder(roomType, reserver);
+        GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
+        newBooking.setDayBooked(start);
+        newBooking.setDuration(duration);
+        em.persist(newBooking);
+        hotelOperations.queueBooking(newBooking);
+        
+    }
+    @Override
+                public void bookARoomPartner(PartnerEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration){
         BookingOrder newBooking = new BookingOrder(roomType, reserver);
         GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
         newBooking.setDayBooked(start);

@@ -37,6 +37,8 @@ public class BookingOrder implements Serializable {
     private EmployeeEntity employee;
     @ManyToOne(optional = true)
     private GuestEntity guest;
+    @ManyToOne(optional = true)
+    private PartnerEntity partner;
 
     public BookingOrder() {
     }
@@ -49,6 +51,11 @@ public class BookingOrder implements Serializable {
     public BookingOrder(String typeName, GuestEntity guest) {
         this.typeName = typeName;
         this.guest = guest;
+    }
+
+    public BookingOrder(String typeName, PartnerEntity partner) {
+        this.typeName = typeName;
+        this.partner = partner;
     }
 
 
@@ -128,6 +135,14 @@ public class BookingOrder implements Serializable {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public PartnerEntity getPartner() {
+        return partner;
+    }
+
+    public void setPartner(PartnerEntity partner) {
+        this.partner = partner;
     }
     
 }
