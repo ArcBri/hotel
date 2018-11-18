@@ -44,7 +44,8 @@ public class RoomTypeEntity implements Serializable {
     private List<RoomEntity> rooms = new ArrayList<RoomEntity>();
     @OneToMany(mappedBy="roomstype", cascade={PERSIST, MERGE})
     private List<RoomRateEntity> roomrates;
-    private int disabled = 0;
+    @Column
+    private Boolean disabled = false;
     
     
    
@@ -151,12 +152,12 @@ public class RoomTypeEntity implements Serializable {
         this.size = size;
     }
 
-    public int getDisabled() {
+    public Boolean getDisabled() {
         return disabled;
     }
 
-    public void setDisabled() {
-        this.disabled = 1;
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
     }
 
     public List<RoomEntity> getRooms() {

@@ -5,6 +5,7 @@
  */
 package Stateless;
 
+import Entity.BookingOrder;
 import Entity.RoomEntity;
 import Entity.RoomTypeEntity;
 import java.util.Calendar;
@@ -71,7 +72,7 @@ public class RoomBean implements RoomBeanRemote, RoomBeanLocal {
     
     @Override
     public List<RoomEntity> searchRoom(GregorianCalendar dateStart, int duration) {
-        List<RoomEntity> candidates = em.createQuery("SELECT rm FROM RoomEntity rm").getResultList();
+        List<RoomEntity> candidates = em.createQuery("SELECT rm FROM RoomEntity rm WHERE rm.disabled LIKE :bool").setParameter("bool", false).getResultList();
         for(RoomEntity rm: candidates) {
             List<GregorianCalendar> daysBooked = rm.getDayBooked();
             for(GregorianCalendar k: daysBooked){//looking at the room's days 1 by 1
@@ -85,6 +86,26 @@ public class RoomBean implements RoomBeanRemote, RoomBeanLocal {
             }
         }
         return(candidates);
+    }
+    
+    @Override
+    public Boolean checkDisabled(int roomnumber) {
+        List<BookingOrder> allbookings = em.createQuery("SELECT bo FROM BookingOrder bo").getResultList();
+        Boolean disable = false;
+        for (BookingOrder bo: allbookings) {
+            if (bo.getRoomFinalNumber() == roomnumber) {
+                disable = true;
+            }
+        }
+        return disable;
+    }
+    
+    @Override
+    public void disable(int roomnumber) {
+        RoomEntity room = (RoomEntity) em.createQuery("SELECT rm FROM RoomEntity rm WHERE rm.finalNumber LIKE :roomfinalnumber").setParameter("roomfinalnumber", roomnumber).getSingleResult();
+        room.setDisabled(true);
+        em.merge(room);
+        em.flush();
     }
 
     // Add business logic below. (Right-click in editor and choose

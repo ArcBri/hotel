@@ -78,6 +78,19 @@ public class RoomTypeBean implements RoomTypeBeanRemote, RoomTypeBeanLocal {
         em.flush();
     }
     
+    @Override
+    public Boolean checkDisabled(String typename) {
+        RoomTypeEntity roomtype = (RoomTypeEntity) em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.typeName LIKE :roomtypename").setParameter("roomtypename", typename).getSingleResult();
+        return roomtype.getDisabled();
+    }
+    
+    @Override
+    public void disableRoomType(String typename) {
+        RoomTypeEntity roomtype = (RoomTypeEntity) em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.typeName LIKE :roomtypename").setParameter("roomtypename", typename).getSingleResult();
+        roomtype.setDisabled(true);
+        em.merge(roomtype);
+        em.flush();
+    }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

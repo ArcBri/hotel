@@ -76,6 +76,8 @@ class mainApp {
                 System.out.println("5) View Room Rate Operations");
                 System.out.println("6) View Room Allocation Exception Report"); //to add
                 System.out.println("7) Book a room");
+                System.out.println("8) Check in a guest");
+                System.out.println("9) Check out a guest");
                 System.out.println("99) Do it");
                 System.out.println("0) Log Out");
                 int choice = sc.nextInt();
@@ -165,6 +167,12 @@ class mainApp {
                         break;
                     case 7:
                         bookRoom();
+                        break;
+                    case 8:
+                        checkIn();
+                        break;
+                    case 9:
+                        checkOut();
                         break;
                     case 99:
                         hotelReserve.doIt();
@@ -307,20 +315,39 @@ class mainApp {
         sc.nextLine();
         System.out.println("Enter the name of the Room Type to be deleted:");
         String type = sc.nextLine();
-        roomtypebean.deleteRoomType(type);
-        System.out.println("Room Type \"" + type +"\" Deleted");
+        List<RoomEntity> roomlist = roombean.viewAllRooms();
+        int delete = 0;
+        for (RoomEntity r: roomlist) {
+            if (r.getRoomType().equals(type)) {
+                delete = 1;
+            }
+        }
+        if (delete == 1) {
+            roomtypebean.disableRoomType(type);
+            System.out.println("Room Type \"" + type + "\" Disabled");
+        }
+        else {
+            roomtypebean.deleteRoomType(type);
+            System.out.println("Room Type \"" + type +"\" Deleted");
+        }
     }
     
     private void createNewRoom() {
         sc.nextLine();
         System.out.println("Enter the Room Type of the new Room:");
         String t = sc.nextLine();
-        System.out.println("Enter the Floor Number of the new Room");
-        int f = sc.nextInt();
-        System.out.println("Enter the Room Number of the new Room");
-        int r = sc.nextInt();
-        RoomEntity room = new RoomEntity(t, f, r);
-        roombean.createRoom(room);
+        Boolean disabled = roomtypebean.checkDisabled(t);
+        if (disabled == false) {
+            System.out.println("Enter the Floor Number of the new Room");
+            int f = sc.nextInt();
+            System.out.println("Enter the Room Number of the new Room");
+            int r = sc.nextInt();
+            RoomEntity room = new RoomEntity(t, f, r);
+            roombean.createRoom(room);
+        }
+        else {
+            System.out.println("Room Type is disabled, please choose another.");
+        }
     }
     
     private void viewAllRooms() {
@@ -368,8 +395,15 @@ class mainApp {
     public void deleteRoom() {
         System.out.println("Enter the room number of the Room to be deleted: ");
         int roomnumber = sc.nextInt();
-        roombean.deleteRoom(roomnumber);
-        System.out.println("Room " + roomnumber + " Deleted");
+        Boolean disable = roombean.checkDisabled(roomnumber);
+        if (disable == true) {
+            roombean.disable(roomnumber);
+            System.out.println("Room " + roomnumber + " Disabled");
+        }
+        else {
+            roombean.deleteRoom(roomnumber);
+            System.out.println("Room " + roomnumber + " Deleted");
+        }
     }
     
     public void createNewRoomRate() {
@@ -536,9 +570,15 @@ class mainApp {
         System.out.println("Enter the Name of the Room Rate to be deleted: ");
         sc.nextLine();
         String name = sc.nextLine();
-        roomratebean.deleteRoomRate(name);
-        System.out.println("Room Rate Record " + name + " Deleted");
-        
+        Boolean disable = roomratebean.checkDisabled(name);
+        if (disable == true) {
+            roomratebean.disable(name);
+            System.out.println("Room Rate Record " + name + " Disabled");
+        }
+        else {
+            roomratebean.deleteRoomRate(name);
+            System.out.println("Room Rate Record " + name + " Deleted");
+        }
     }
 
     private EmployeeBeanRemote lookupEmployeeBeanRemote() {
@@ -598,7 +638,7 @@ class mainApp {
         int duration =dayDiff(d1,d2);
         List<RoomEntity> rooms=roombean.searchRoom(d1, duration);
         for(int k=0; k<rooms.size(); k++){
-            displayUnbookedRooms(d1,d2,rooms.get(k));
+            displayUnbookedRooms(d1,d2,rooms.get(k), duration);
         }
         System.out.println("Enter choice room number");
         int roomnumber=sc.nextInt();
@@ -635,11 +675,37 @@ class mainApp {
         }
     }
 
-    private void displayUnbookedRooms(GregorianCalendar d1, GregorianCalendar d2, RoomEntity get) {
-        System.out.println("ROOM "+get.getFinalNumber()+" of ROOMTYPE "+get.getRoomType());
+    private void displayUnbookedRooms(GregorianCalendar d1, GregorianCalendar d2, RoomEntity get, int duration) {
+        String Roomtype = get.getRoomType();
+        BigDecimal rateamt = roomratebean.getWalkInRate(Roomtype);
+        BigDecimal finalprice = BigDecimal.ZERO;
+        for (int g = 0; g < duration; g++) {
+            finalprice = finalprice.add(rateamt);
+        }
+        System.out.println("ROOM "+get.getFinalNumber()+" of ROOMTYPE "+get.getRoomType() + " $ " + finalprice);
         
     }
     
+    private void checkIn() {
+        System.out.println("Enter the first name of the guest: ");
+        sc.nextLine();
+        String firstname = sc.nextLine();
+        System.out.println("Enter the last name of the guest: ");
+        String lastname = sc.nextLine();
+        
+        System.out.println(firstname + " " + lastname + "checked in.");
+        
+    }
+    
+    private void checkOut() {
+        System.out.println("Enter the first name of the guest: ");
+        sc.nextLine();
+        String firstname = sc.nextLine();
+        System.out.println("Enter the last name of the guest: ");
+        String lastname = sc.nextLine();
+        
+        System.out.println(firstname + " " + lastname + "checked out.");
+    }
     
     
 }

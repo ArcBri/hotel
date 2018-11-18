@@ -60,9 +60,10 @@ public class RoomRateBean implements RoomRateBeanRemote, RoomRateBeanLocal {
     }
     
     @Override
-    public RoomRateEntity getWalkInRate(String roomType) {
+    public BigDecimal getWalkInRate(String roomType) {
         RoomRateEntity walkrate = (RoomRateEntity) em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.rateType = \\\"Published Rate\\\" AND rr.roomType LIKE :typename").setParameter("typename", roomType).getSingleResult();
-        return walkrate;
+        BigDecimal price = walkrate.getRatePerNight();
+        return price;
     }
     
     @Override
@@ -128,6 +129,19 @@ public class RoomRateBean implements RoomRateBeanRemote, RoomRateBeanLocal {
 
         return overallrate;
         
+    }
+    
+    @Override
+    public Boolean checkDisabled(String name) {
+        return false;
+    }
+    
+    @Override
+    public void disable(String name) {
+        RoomRateEntity rr = (RoomRateEntity) em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.name LIKE :ratename").setParameter("ratename", name).getSingleResult();
+        rr.setDisabled(true);
+        em.merge(rr);
+        em.flush();
     }
 
     // Add business logic below. (Right-click in editor and choose

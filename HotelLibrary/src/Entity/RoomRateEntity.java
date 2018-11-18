@@ -44,7 +44,10 @@ public class RoomRateEntity implements Serializable {
     private ArrayList <GregorianCalendar> rateperiod; 
     @ManyToOne
     private RoomTypeEntity roomstype;
+    @Column
     private Boolean validity = false;
+    @Column
+    private Boolean disabled = false;
 
     public RoomRateEntity() {
     }
@@ -170,6 +173,15 @@ public class RoomRateEntity implements Serializable {
     public void setRateperiod(ArrayList <GregorianCalendar> rateperiod) {
         this.rateperiod = rateperiod;
     }
+
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
+    }
+    
     
 }
 

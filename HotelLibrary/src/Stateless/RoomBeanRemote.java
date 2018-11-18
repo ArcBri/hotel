@@ -23,4 +23,6 @@ public interface RoomBeanRemote {
     public void updateRoomDetails(RoomEntity rm);
     public void deleteRoom(int roomnumber);
     public List<RoomEntity> searchRoom(GregorianCalendar dateStart, int duration);
+    public Boolean checkDisabled(int roomnumber);
+    public void disable(int roomnumber);
 }

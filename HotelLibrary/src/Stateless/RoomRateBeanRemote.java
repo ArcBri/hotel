@@ -22,6 +22,8 @@ public interface RoomRateBeanRemote {
     public RoomRateEntity getDetails(String name);
     public void updateRoomRateDetails(RoomRateEntity rr);
     public void deleteRoomRate(String name);
-    public RoomRateEntity getWalkInRate(String roomtype);
+    public BigDecimal getWalkInRate(String roomtype);
     public BigDecimal getOnlineRate(String roomType, GregorianCalendar startDate, int duration);
+    public Boolean checkDisabled(String name);
+    public void disable(String name);
 }

@@ -26,4 +26,8 @@ public interface RoomTypeBeanRemote {
     public void updateRoomTypeDetails(RoomTypeEntity rt);
     
     public void deleteRoomType(String typename);
+    
+    public Boolean checkDisabled(String typename);
+    
+    public void disableRoomType(String typename);
 }
