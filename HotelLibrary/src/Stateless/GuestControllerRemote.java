@@ -5,7 +5,9 @@
  */
 package Stateless;
 
+import Entity.BookingOrder;
 import Entity.GuestEntity;
+import java.util.List;
 import javax.ejb.Remote;
 import util.EmployeeNotFoundException;
 import util.exception.InvalidLoginCredentialException;
@@ -23,4 +25,7 @@ public interface GuestControllerRemote {
 
     public GuestEntity userLogin(String username, String password) throws InvalidLoginCredentialException;
     
+    public List<BookingOrder> viewAllReservations(GuestEntity guest);
+    
+    public BookingOrder getReservationDetails(GuestEntity guest, int roomnumber);
 }

@@ -5,7 +5,9 @@
  */
 package Stateless;
 
+import Entity.BookingOrder;
 import Entity.GuestEntity;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -72,5 +74,26 @@ public class GuestController implements GuestControllerRemote, GuestControllerLo
 
     public void persist(Object object) {
         em.persist(object);
+    }
+    
+    public List<BookingOrder> viewAllReservations(GuestEntity guest) {
+        List<BookingOrder> reservationlist = em.createQuery("SELECT bo FROM BookingOrder bo").getResultList();
+        for (BookingOrder bo: reservationlist) {
+            if(bo.getGuest().equals(guest) == false) {
+                reservationlist.remove(bo);
+            }
+        }
+        return reservationlist;
+    }
+    
+    public BookingOrder getReservationDetails(GuestEntity guest, int roomnumber) {
+        List <BookingOrder> booking = em.createQuery("SELECT bo FROM BookingOrder bo WHERE bo.roomFinalNumber LIKE :number").setParameter("number", roomnumber).getResultList();
+        BookingOrder roombooking = new BookingOrder();
+        for (BookingOrder bo: booking) {
+            if(bo.getGuest().equals(guest)) {
+                roombooking = bo;
+            }
+        }
+        return roombooking;
     }
 }

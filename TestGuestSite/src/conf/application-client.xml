@@ -16,4 +16,9 @@
     <ejb-ref-type>Session</ejb-ref-type>
     <remote>Stateless.RoomRateBeanRemote</remote>
   </ejb-ref>
+  <ejb-ref>
+    <ejb-ref-name>hotelReservations</ejb-ref-name>
+    <ejb-ref-type>Session</ejb-ref-type>
+    <remote>Stateful.hotelReservationsRemote</remote>
+  </ejb-ref>
 </application-client>

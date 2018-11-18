@@ -402,7 +402,7 @@ class mainApp {
             GregorianCalendar enddate = new GregorianCalendar(endyear, endmonth, endday);
             roomrate.setValidityEnd(enddate);
             ArrayList <GregorianCalendar> rateperiod = new ArrayList<GregorianCalendar>();
-            GregorianCalendar day = startdate;
+            GregorianCalendar day = new GregorianCalendar(startyear, startmonth, startday);
             while (day.equals(enddate) == false) {
                 rateperiod.add(day);
                 day.add(GregorianCalendar.DAY_OF_WEEK, 1);

@@ -5,13 +5,17 @@
  */
 package testguestsite;
 
+import Entity.BookingOrder;
 import Entity.GuestEntity;
 import Entity.RoomEntity;
 import Entity.RoomRateEntity;
+import Stateful.hotelReservationsRemote;
 import Stateless.GuestControllerRemote;
 import Stateless.RoomBeanRemote;
 import Stateless.RoomRateBeanRemote;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
@@ -35,6 +39,7 @@ class MainApp {
     private final GuestControllerRemote guestControl= lookupGuestControllerRemote();
     private final RoomBeanRemote roombean = lookupRoomBeanRemote();
     private final RoomRateBeanRemote roomratebean = lookupRoomRateBeanRemote();
+    private final hotelReservationsRemote hotelReserve = lookuphotelReservationsRemote();
 
     public MainApp() {
     }
@@ -61,10 +66,9 @@ class MainApp {
                     else if (state == true) {
                         System.out.println();
                         System.out.println("Choose Option");
-                        System.out.println("1) Search Hotel Room");
-                        System.out.println("2) Reserve Hotel Room");
-                        System.out.println("3) View All My Reservations");
-                        System.out.println("4) View My Reservation Details");
+                        System.out.println("1) Search and Book Hotel Room");
+                        System.out.println("2) View All My Reservations");
+                        System.out.println("3) View My Reservation Details");
                         System.out.println("0) Log Out");
                         int choice = sc.nextInt();
                         switch(choice) {
@@ -72,12 +76,9 @@ class MainApp {
                                 searchRoom();
                                 break;
                             case 2:
-                                bookRoom();
-                                break;
-                            case 3:
                                 viewAllReservations();
                                 break;
-                            case 4: 
+                            case 3: 
                                 viewReservationDetails();
                                 break;
                             case 0:
@@ -129,22 +130,47 @@ class MainApp {
             BigDecimal onlinerate = roomratebean.getOnlineRate(rm.getRoomType(), inDate, duration);
             System.out.println("Room " + rm.getFinalNumber() + ": $" + onlinerate);
         }
-        /*boolean booking = true;
+        boolean booking = true;
         while (booking == true) {
-            bookroom();
             System.out.println("Book a Room? (Y/N)");
             String bookchoice = sc.next();
-            if (bookchoice == "N") {
+            if (bookchoice.equals("Y")) {
+                bookRoom(inYear, inMonth, inDay, duration);
+            }
+            else {
                 System.out.println("Booking(s) Saved");
                 booking = false;
             }
-        }*/
+        }
         
     }
     
-    private void bookRoom() {
+    private void bookRoom(int startYear, int startMonth, int startDay, int duration) {
         System.out.println("Enter the room number of the room to be booked: ");
         int roomnumber = sc.nextInt();
+        String roomType=roombean.getRoomDetails(roomnumber).getRoomType();
+        hotelReserve.bookARoomGuest(loggedInGuest, roomType, startYear, startMonth, startDay, duration, roomnumber);
+    }
+    
+    private void viewAllReservations() {
+        List<BookingOrder> reservationlist = guestControl.viewAllReservations(loggedInGuest);
+        int count = 1;
+        for (BookingOrder bo: reservationlist) {
+            System.out.println(count + ") Room " + bo.getRoomFinalNumber());
+            count++;
+        }
+    }
+    
+    private void viewReservationDetails() {
+        System.out.println("Enter the room number of the booking");
+        int finalnumber = sc.nextInt();
+        BookingOrder booking = guestControl.getReservationDetails(loggedInGuest, finalnumber);
+        GregorianCalendar startdate = booking.getDayBooked();
+        int year = startdate.get(Calendar.YEAR);
+        int month = startdate.get(Calendar.MONTH) + 1;
+        int day = startdate.get(Calendar.DAY_OF_MONTH);
+        int duration = booking.getDuration();
+        System.out.println("Room " + finalnumber + " booked from " + year + "/" + month + "/" + day + " for " + duration + "days.");
     }
 
     private GuestControllerRemote lookupGuestControllerRemote() {
@@ -184,6 +210,17 @@ class MainApp {
         long durationInDays=durationInMillis/(1000*60*60*24);
         return Math.toIntExact(durationInDays);
     }
+
+    private hotelReservationsRemote lookuphotelReservationsRemote() {
+        try {
+            Context c = new InitialContext();
+            return (hotelReservationsRemote) c.lookup("java:comp/env/hotelReservations");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
     
    
 }
