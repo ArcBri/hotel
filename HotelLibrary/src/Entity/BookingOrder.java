@@ -33,6 +33,8 @@ public class BookingOrder implements Serializable {
     private GregorianCalendar dayBooked;
     @Column(nullable=false)
     private int duration;
+    @Column
+    private int roomFinalNumber;
     @ManyToOne(optional = true)
     private EmployeeEntity employee;
     @ManyToOne(optional = true)
@@ -43,19 +45,22 @@ public class BookingOrder implements Serializable {
     public BookingOrder() {
     }
 
-    public BookingOrder(String typeName, EmployeeEntity employee) {
+    public BookingOrder(String typeName, EmployeeEntity employee, int number) {
         this.typeName = typeName;
         this.employee = employee;
+        this.roomFinalNumber=number;
     }
 
-    public BookingOrder(String typeName, GuestEntity guest) {
+    public BookingOrder(String typeName, GuestEntity guest, int number) {
         this.typeName = typeName;
         this.guest = guest;
+        this.roomFinalNumber=number;
     }
 
-    public BookingOrder(String typeName, PartnerEntity partner) {
+    public BookingOrder(String typeName, PartnerEntity partner, int number) {
         this.typeName = typeName;
         this.partner = partner;
+        this.roomFinalNumber=number;
     }
 
 
@@ -143,6 +148,14 @@ public class BookingOrder implements Serializable {
 
     public void setPartner(PartnerEntity partner) {
         this.partner = partner;
+    }
+
+    public int getRoomFinalNumber() {
+        return roomFinalNumber;
+    }
+
+    public void setRoomFinalNumber(int roomFinalNumber) {
+        this.roomFinalNumber = roomFinalNumber;
     }
     
 }

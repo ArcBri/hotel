@@ -9,6 +9,7 @@ import Entity.BookingOrder;
 import Entity.RoomEntity;
 import Entity.RoomTypeEntity;
 import Stateful.hotelReservationsLocal;
+import Stateless.RoomBeanLocal;
 import Stateless.RoomTypeBeanLocal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,6 +32,9 @@ import util.RoomTypeNotFoundException;
 public class hotelOperations implements hotelOperationsLocal {
 
     @EJB
+    private RoomBeanLocal roomBean;
+
+    @EJB
     private hotelReservationsLocal hotelReservations;
 @EJB
     private RoomTypeBeanLocal roomTypeBean;
@@ -49,7 +53,7 @@ public class hotelOperations implements hotelOperationsLocal {
             BookingOrder currentNeeded = roomsneeded.get(i);
             String typeNeeded =currentNeeded.getTypeName();
             GregorianCalendar dayNeeded =currentNeeded.getDayBooked();
-            GregorianCalendar daysNeeded=currentNeeded.getDayBooked();
+            int roomNumber=currentNeeded.getRoomFinalNumber();
             int durationofstay = currentNeeded.getDuration();
             List<GregorianCalendar> daysRoomBooked = new ArrayList<>();
             
@@ -57,15 +61,17 @@ public class hotelOperations implements hotelOperationsLocal {
                 dayNeeded.add(GregorianCalendar.DAY_OF_MONTH, day);
                 daysRoomBooked.add(dayNeeded);
             }
-            
-            RoomTypeEntity needed=roomTypeBean.getRoomTypeByName(typeNeeded);
+            RoomEntity roomToBook=roomBean.getRoomByFinalNumber(roomNumber);
+            hotelReservations.actuallyBookTheRoom(roomToBook.getRoomId(), daysRoomBooked);
+            successfulBookings.add(i);
+            /*RoomTypeEntity needed=roomTypeBean.getRoomTypeByName(typeNeeded);
             List<RoomEntity> room = needed.getRooms();
             for(int k=0; k<room.size();k++){//looking through each room
                 RoomEntity j = room.get(k);
                 if(j.getDayBooked().isEmpty()==false){
                  ArrayList<GregorianCalendar> daysBooked = j.getDayBooked();
                  int sizeOf = daysBooked.size();
-               /* if(sizeOf!=durationofstay){*/
+               if(sizeOf!=durationofstay){
                  for(int m=0; m<sizeOf;m++){//looking at the room's days 1 by 1
                      GregorianCalendar dayBooked=daysBooked.get(m);
                      for(int day=0; day<durationofstay; day++){//checking the order's required rooms
@@ -91,7 +97,8 @@ public class hotelOperations implements hotelOperationsLocal {
             }
             
         }
-        
+       */ 
+        }
         deleteSuccessfulFromQueue();//after this, anything remaining in roomsneeded means not enough space for that day
     }
     

@@ -45,8 +45,8 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
     // "Insert Code > Add Business Method")
     
     @Override
-    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration){
-        BookingOrder newBooking = new BookingOrder(roomType, reserver);
+    public void bookARoomEmployee(EmployeeEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration, int roomnumber){
+        BookingOrder newBooking = new BookingOrder(roomType, reserver, roomnumber);
         GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
         newBooking.setDayBooked(start);
         newBooking.setDuration(duration);
@@ -55,8 +55,8 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
         
     }
     @Override
-        public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration){
-        BookingOrder newBooking = new BookingOrder(roomType, reserver);
+        public void bookARoomGuest(GuestEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration, int roomnumber){
+        BookingOrder newBooking = new BookingOrder(roomType, reserver, roomnumber);
         GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
         newBooking.setDayBooked(start);
         newBooking.setDuration(duration);
@@ -65,8 +65,8 @@ public class hotelReservations implements hotelReservationsRemote, hotelReservat
         
     }
     @Override
-                public void bookARoomPartner(PartnerEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration){
-        BookingOrder newBooking = new BookingOrder(roomType, reserver);
+                public void bookARoomPartner(PartnerEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration, int roomnumber){
+        BookingOrder newBooking = new BookingOrder(roomType, reserver, roomnumber);
         GregorianCalendar start = new GregorianCalendar(startYear, startMonth-1, startDay);
         newBooking.setDayBooked(start);
         newBooking.setDuration(duration);

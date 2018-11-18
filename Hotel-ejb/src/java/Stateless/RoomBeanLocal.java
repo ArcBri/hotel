@@ -5,6 +5,7 @@
  */
 package Stateless;
 
+import Entity.RoomEntity;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +14,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface RoomBeanLocal {
+
+    public RoomEntity getRoomByFinalNumber(int roomfinalnumber);
     
 }

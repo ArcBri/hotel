@@ -582,9 +582,9 @@ class mainApp {
     }
 
     private void bookRoom() {
-        System.out.println("Enter room type desired");
+        /*System.out.println("Enter room type desired");
         sc.nextLine();
-        String roomType=sc.nextLine();
+        String roomType=sc.nextLine();*/
         System.out.println("Enter check in date in this order: Year, Month, Day");
         int startYear=sc.nextInt();
         int startMonth=sc.nextInt();
@@ -596,8 +596,15 @@ class mainApp {
         int endDay=sc.nextInt();
         GregorianCalendar d2 = new GregorianCalendar(endYear, endMonth-1, endDay);
         int duration =dayDiff(d1,d2);
+        List<RoomEntity> rooms=roombean.searchRoom(d1, duration);
+        for(int k=0; k<rooms.size(); k++){
+            displayUnbookedRooms(d1,d2,rooms.get(k));
+        }
+        System.out.println("Enter choice room number");
+        int roomnumber=sc.nextInt();
+        String roomType=roombean.getRoomDetails(roomnumber).getRoomType();
         sc.nextLine();
-        hotelReserve.bookARoomEmployee(loggedInEmployee, roomType, startYear, startMonth, startDay, duration);
+        hotelReserve.bookARoomEmployee(loggedInEmployee, roomType, startYear, startMonth, startDay, duration, roomnumber);
         
     }
 
@@ -626,6 +633,11 @@ class mainApp {
             System.out.println(count + ") Room "+ r.getFinalNumber() + "booked?" + r.getDayBooked().toString());
             count++;
         }
+    }
+
+    private void displayUnbookedRooms(GregorianCalendar d1, GregorianCalendar d2, RoomEntity get) {
+        System.out.println("ROOM "+get.getFinalNumber()+" of ROOMTYPE "+get.getRoomType());
+        
     }
     
     
