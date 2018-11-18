@@ -51,6 +51,10 @@ public class RoomBean implements RoomBeanRemote, RoomBeanLocal {
     public RoomEntity getRoomDetails(int roomnumber) {
         return (RoomEntity) em.createQuery("SELECT rm FROM RoomEntity rm WHERE rm.finalNumber LIKE :roomfinalnumber").setParameter("roomfinalnumber", roomnumber).getSingleResult();
     }
+    @Override
+        public RoomEntity getRoomByFinalNumber(int roomfinalnumber) {
+        return (RoomEntity) em.createQuery("SELECT rm FROM RoomEntity rm WHERE rm.finalNumber LIKE :roomfinalnumber").setParameter("roomfinalnumber", roomfinalnumber).getSingleResult();
+    }
     
     @Override
     public void updateRoomDetails (RoomEntity rm) {

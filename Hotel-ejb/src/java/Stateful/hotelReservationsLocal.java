@@ -21,6 +21,5 @@ public interface hotelReservationsLocal {
 
     public void actuallyBookTheRoom(Long roomId, List<GregorianCalendar> daysNeeded);
 
-    public void bookARoomPartner(PartnerEntity reserver, String roomType, int startYear, int startMonth, int startDay, int duration);
     
 }
