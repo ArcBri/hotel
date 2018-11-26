@@ -221,10 +221,6 @@ exists or setup the property manually. For example like this:
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
-        <ant antfile="${project.TestGuestSite}/build.xml" inheritall="false" target="dist-ear">
-            <property location="${build.dir}" name="dist.ear.dir"/>
-            <property name="deploy.on.save" value="${build.deploy.on.save}"/>
-        </ant>
     </target>
     <target depends="init,deps-jar,deps-j2ee-archive" name="pre-pre-compile"/>
     <target name="pre-compile">
@@ -239,7 +235,6 @@ exists or setup the property manually. For example like this:
     <target depends="init,deps-jar,pre-pre-compile,pre-compile" name="-do-compile-deps">
         <copyfiles files="${reference.Hotel-ejb.dist-ear}" todir="${build.dir}//"/>
         <copyfiles files="${reference.HotelManagementClient.j2ee-module-car}" todir="${build.dir}//"/>
-        <copyfiles files="${reference.TestGuestSite.j2ee-module-car}" todir="${build.dir}//"/>
         <copyfiles files="${reference.HotelReservationClient.j2ee-module-car}" todir="${build.dir}//"/>
         <copyfiles files="${reference.HotelReservationsSystem.dist-ear}" todir="${build.dir}//"/>
     </target>
@@ -322,7 +317,6 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.HotelManagementClient}/build.xml" inheritall="false" target="-run-deploy-am"/>
         <ant antfile="${project.HotelReservationClient}/build.xml" inheritall="false" target="-run-deploy-am"/>
         <ant antfile="${project.HotelReservationsSystem}/build.xml" inheritall="false" target="-run-deploy-am"/>
-        <ant antfile="${project.TestGuestSite}/build.xml" inheritall="false" target="-run-deploy-am"/>
     </target>
     <target depends="-init-cos,dist-directory-deploy,pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,post-run-deploy" name="run-deploy"/>
     <target if="netbeans.home" name="-run-deploy-nb">
@@ -664,10 +658,6 @@ exists or setup the property manually. For example like this:
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>
         <ant antfile="${project.HotelReservationsSystem}/build.xml" inheritall="false" target="clean-ear">
-            <property location="${build.dir}" name="dist.ear.dir"/>
-            <property name="deploy.on.save" value="${build.deploy.on.save}"/>
-        </ant>
-        <ant antfile="${project.TestGuestSite}/build.xml" inheritall="false" target="clean-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
             <property name="deploy.on.save" value="${build.deploy.on.save}"/>
         </ant>

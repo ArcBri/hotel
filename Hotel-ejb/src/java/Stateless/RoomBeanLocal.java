@@ -16,5 +16,7 @@ import javax.ejb.Local;
 public interface RoomBeanLocal {
 
     public RoomEntity getRoomByFinalNumber(int roomfinalnumber);
+
+    public Long createRoomLocal(RoomEntity newRoomEntity);
     
 }

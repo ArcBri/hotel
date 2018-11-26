@@ -6,6 +6,9 @@
 package Singleton;
 
 import Entity.BookingOrder;
+import Entity.EmployeeEntity;
+import Entity.GuestEntity;
+import Entity.PartnerEntity;
 import Entity.RoomEntity;
 import Entity.RoomRateEntity;
 import Entity.RoomTypeEntity;
@@ -14,15 +17,17 @@ import Stateless.RoomBeanLocal;
 import Stateless.RoomTypeBeanLocal;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import util.RoomTypeNotFoundException;
 
 /**
@@ -38,13 +43,17 @@ public class hotelOperations implements hotelOperationsLocal {
 
     @EJB
     private hotelReservationsLocal hotelReservations;
-@EJB
+    @EJB
     private RoomTypeBeanLocal roomTypeBean;
 
 
 
-    LinkedList<BookingOrder> roomsneeded=new LinkedList<BookingOrder>();
     Queue<Integer> successfulBookings =new LinkedList<Integer>(); 
+    LinkedList<BookingOrder> roomsneeded=new LinkedList<BookingOrder>();
+    @PersistenceContext(unitName = "Hotel-ejbPU")
+    private EntityManager em;
+    
+    
         // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
@@ -108,6 +117,7 @@ public class hotelOperations implements hotelOperationsLocal {
      void deleteSuccessfulFromQueue() {
         while(successfulBookings.isEmpty()==false){
         roomsneeded.remove(successfulBookings.poll());
+        actuallygenreport();
         }
     }
 @Override
@@ -115,7 +125,18 @@ public class hotelOperations implements hotelOperationsLocal {
          roomsneeded.add(a);
      }
      
+     @PostConstruct
      public void init() {
+         
+         EmployeeEntity manager = new EmployeeEntity("man","ager","username","password");
+         em.persist(manager);
+         em.flush();
+         GuestEntity guest=new GuestEntity("cust","omer","customer","password");
+         em.persist(guest);
+         em.flush();
+       /*  PartnerEntity partner= new PartnerEntity("partner","password");
+         em.persist(partner);
+         em.flush();*/
          //RoomTypeEntity(String typeName, String typeDescription, String size, int bedNumber, int capacity, int[] amenities);
          int[] deluxeamen = {1, 1, 1, 1, 1, 1, 1, 1, 1};
          int[] premieramen = {1, 2, 2, 2, 2, 2, 2, 2, 2};
@@ -128,10 +149,67 @@ public class hotelOperations implements hotelOperationsLocal {
          RoomTypeEntity junior = new RoomTypeEntity("Junior Suite", "A kid sized suite", "Medium", 4, 8, junioramen);
          RoomTypeEntity grand = new RoomTypeEntity("Grand Suite", "A Grand Blue Room for Dreaming and Diving", "Large", 5, 10, grandamen);
          em.persist(deluxe);
+         em.flush();
          em.persist(premier);
+         em.flush();
          em.persist(family);
+         em.flush();
          em.persist(junior);
+         em.flush();
          em.persist(grand);
+         em.flush();
+         
+         //RoomEntity(string roomtype, floornumber,roomnumber)
+         RoomEntity a = new RoomEntity("Deluxe Room", 01,01);
+         roomBean.createRoomLocal(a);
+         RoomEntity b = new RoomEntity("Deluxe Room", 01,02);
+         roomBean.createRoomLocal(b);
+         RoomEntity c = new RoomEntity("Deluxe Room", 01,03);
+         roomBean.createRoomLocal(c);
+         RoomEntity d = new RoomEntity("Deluxe Room", 01,04);
+         roomBean.createRoomLocal(d);
+         RoomEntity e = new RoomEntity("Deluxe Room", 01,05);
+         roomBean.createRoomLocal(e);
+         RoomEntity a1 = new RoomEntity("Premier Room", 06, 01);
+         roomBean.createRoomLocal(a1);
+         RoomEntity b1 = new RoomEntity("Premier Room", 06, 02);
+         roomBean.createRoomLocal(b1);
+         RoomEntity c1 = new RoomEntity("Premier Room", 06, 03);
+         roomBean.createRoomLocal(c1);
+         RoomEntity d1 = new RoomEntity("Premier Room", 06, 04);
+         roomBean.createRoomLocal(d1);
+         RoomEntity e1 = new RoomEntity("Premier Room", 06, 05);
+         roomBean.createRoomLocal(e1);
+         RoomEntity a2 = new RoomEntity("Family Room", 11,01);
+         roomBean.createRoomLocal(a2);
+         RoomEntity b2 = new RoomEntity("Family Room", 11,02);
+         roomBean.createRoomLocal(b2);
+         RoomEntity c2 = new RoomEntity("Family Room", 11,03);
+         roomBean.createRoomLocal(c2);
+         RoomEntity d2 = new RoomEntity("Family Room", 11,04);
+         roomBean.createRoomLocal(d2);
+         RoomEntity e2 = new RoomEntity("Family Room", 11,05);
+         roomBean.createRoomLocal(e2);
+         RoomEntity a3= new RoomEntity("Junior Suite", 16,01);
+         roomBean.createRoomLocal(a3);
+         RoomEntity b3= new RoomEntity("Junior Suite", 16,02);
+         roomBean.createRoomLocal(b3);
+         RoomEntity c3= new RoomEntity("Junior Suite", 16,03);
+         roomBean.createRoomLocal(c3);
+         RoomEntity d3= new RoomEntity("Junior Suite", 16,04);
+         roomBean.createRoomLocal(d3);
+         RoomEntity e3= new RoomEntity("Junior Suite", 16,05);
+         roomBean.createRoomLocal(e3);
+         RoomEntity a4 = new RoomEntity("Grand Suite", 21, 01);
+         roomBean.createRoomLocal(a4);
+         RoomEntity b4 = new RoomEntity("Grand Suite", 21, 02);
+         roomBean.createRoomLocal(b4);
+         RoomEntity c4 = new RoomEntity("Grand Suite", 21, 03);
+         roomBean.createRoomLocal(c4);
+         RoomEntity d4 = new RoomEntity("Grand Suite", 21, 04);
+         roomBean.createRoomLocal(d4);
+         RoomEntity e4 = new RoomEntity("Grand Suite", 21, 05);
+         roomBean.createRoomLocal(e4);
          
          //RoomRateEntity(String name, String roomType, String rateType, BigDecimal ratePerNight)
          RoomRateEntity pubdel = new RoomRateEntity("pubdeluxe", "Deluxe Room", "Published Rate", BigDecimal.valueOf(100));
@@ -146,17 +224,24 @@ public class hotelOperations implements hotelOperationsLocal {
          RoomRateEntity normgrand = new RoomRateEntity("normgrand", "Grand Suite", "Normal Rate", BigDecimal.valueOf(180));
          
          em.persist(pubdel);
+         em.flush();
          em.persist(normdel);
+         em.flush();
          em.persist(pubprem);
+         em.flush();
          em.persist(normprem);
+         em.flush();
          em.persist(pubfam);
+         em.flush();
          em.persist(normfam);
+         em.flush();
          em.persist(pubjun);
+         em.flush();
          em.persist(normjun);
+         em.flush();
          em.persist(pubgrand);
-         em.persist(normgrand);
-         
-         
+         em.flush();
+         em.persist(normgrand);         
          em.flush();
          
          
@@ -165,4 +250,12 @@ public class hotelOperations implements hotelOperationsLocal {
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    public void persist(Object object) {
+        em.persist(object);
+    }
+
+    private void actuallygenreport() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package testguestsite;
+package hotelreservationclient;
 
 import Entity.BookingOrder;
 import Entity.GuestEntity;
 import Entity.RoomEntity;
-import Entity.RoomRateEntity;
 import Stateful.hotelReservationsRemote;
 import Stateless.GuestControllerRemote;
 import Stateless.RoomBeanRemote;
 import Stateless.RoomRateBeanRemote;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -31,7 +29,7 @@ import util.exception.InvalidLoginCredentialException;
  * @author Joshua
  */
 class MainApp {
-    Scanner sc =new Scanner(System.in);
+        Scanner sc =new Scanner(System.in);
     private boolean state = false;
     private boolean end = false;
     private GuestEntity loggedInGuest;
@@ -221,6 +219,4 @@ class MainApp {
         }
     }
     
-    
-   
 }

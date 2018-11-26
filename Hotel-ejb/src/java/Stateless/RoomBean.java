@@ -40,7 +40,16 @@ public class RoomBean implements RoomBeanRemote, RoomBeanLocal {
         em.flush();
         return newRoomEntity.getRoomId();
     }
-    
+    @Override
+        public Long createRoomLocal(RoomEntity newRoomEntity){
+        String typename = newRoomEntity.getRoomType();
+        RoomTypeEntity roomtype = (RoomTypeEntity) em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.typeName LIKE :roomtypename").setParameter("roomtypename", typename).getSingleResult();
+        newRoomEntity.setRoomtype(roomtype);
+        roomtype.getRooms().add(newRoomEntity);
+        em.persist(newRoomEntity);
+        em.flush();
+        return newRoomEntity.getRoomId();
+    }
     
     @Override
     public List<RoomEntity> viewAllRooms(){
